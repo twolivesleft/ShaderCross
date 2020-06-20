@@ -1,0 +1,909 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3645F581249B3B4B00FDF25F /* ShaderCross.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F57F249B3B4B00FDF25F /* ShaderCross.cpp */; };
+		3645F5EE249B6DC500FDF25F /* MetalTranslator2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5D6249B6DC500FDF25F /* MetalTranslator2.cpp */; };
+		3645F5EF249B6DC500FDF25F /* GlslTranslator2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5D7249B6DC500FDF25F /* GlslTranslator2.cpp */; };
+		3645F5F0249B6DC500FDF25F /* AgalTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5DA249B6DC500FDF25F /* AgalTranslator.cpp */; };
+		3645F5F2249B6DC500FDF25F /* SpirVTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E0249B6DC500FDF25F /* SpirVTranslator.cpp */; };
+		3645F5F3249B6DC500FDF25F /* D3D9Compiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E1249B6DC500FDF25F /* D3D9Compiler.cpp */; };
+		3645F5F4249B6DC500FDF25F /* Translator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E5249B6DC500FDF25F /* Translator.cpp */; };
+		3645F5F5249B6DC500FDF25F /* D3D11Compiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E7249B6DC500FDF25F /* D3D11Compiler.cpp */; };
+		3645F5F6249B6DC500FDF25F /* HlslTranslator2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E8249B6DC500FDF25F /* HlslTranslator2.cpp */; };
+		3645F5F9249B6DC500FDF25F /* VarListTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5ED249B6DC500FDF25F /* VarListTranslator.cpp */; };
+		3645F65C249DBF6B00FDF25F /* libglslang-default-resource-limits.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */; };
+		3645F65D249DBF6B00FDF25F /* libglslang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F62A249DBCEF00FDF25F /* libglslang.a */; };
+		3645F65E249DBF6B00FDF25F /* libHLSL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F63A249DBCEF00FDF25F /* libHLSL.a */; };
+		3645F65F249DBF6B00FDF25F /* libOGLCompiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F62E249DBCEF00FDF25F /* libOGLCompiler.a */; };
+		3645F660249DBF6B00FDF25F /* libOSDependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F62C249DBCEF00FDF25F /* libOSDependent.a */; };
+		3645F661249DBF6B00FDF25F /* libSPIRV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F636249DBCEF00FDF25F /* libSPIRV.a */; };
+		3645F662249DBF6B00FDF25F /* libSPVRemapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F638249DBCEF00FDF25F /* libSPVRemapper.a */; };
+		3645F663249DBF6B00FDF25F /* libspirv-cross-c.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F64D249DBD0000FDF25F /* libspirv-cross-c.a */; };
+		3645F664249DBF6B00FDF25F /* libspirv-cross-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F64F249DBD0000FDF25F /* libspirv-cross-core.a */; };
+		3645F665249DBF6B00FDF25F /* libspirv-cross-cpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F651249DBD0000FDF25F /* libspirv-cross-cpp.a */; };
+		3645F666249DBF6B00FDF25F /* libspirv-cross-glsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F653249DBD0000FDF25F /* libspirv-cross-glsl.a */; };
+		3645F667249DBF6B00FDF25F /* libspirv-cross-hlsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F655249DBD0000FDF25F /* libspirv-cross-hlsl.a */; };
+		3645F668249DBF6B00FDF25F /* libspirv-cross-msl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F657249DBD0000FDF25F /* libspirv-cross-msl.a */; };
+		3645F669249DBF6B00FDF25F /* libspirv-cross-reflect.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F659249DBD0000FDF25F /* libspirv-cross-reflect.a */; };
+		3645F66A249DBF6B00FDF25F /* libspirv-cross-util.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F65B249DBD0000FDF25F /* libspirv-cross-util.a */; };
+		369193882494B76700F9F0F4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 369193872494B76700F9F0F4 /* AppDelegate.m */; };
+		3691938B2494B76700F9F0F4 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3691938A2494B76700F9F0F4 /* Renderer.mm */; };
+		3691938E2494B76700F9F0F4 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3691938D2494B76700F9F0F4 /* GameViewController.m */; };
+		369193902494B76700F9F0F4 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3691938F2494B76700F9F0F4 /* Shaders.metal */; };
+		369193942494B76700F9F0F4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 369193922494B76700F9F0F4 /* Main.storyboard */; };
+		369193962494B76900F9F0F4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 369193952494B76900F9F0F4 /* Assets.xcassets */; };
+		369193992494B76900F9F0F4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 369193972494B76900F9F0F4 /* LaunchScreen.storyboard */; };
+		3691939C2494B76900F9F0F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3691939B2494B76900F9F0F4 /* main.m */; };
+		369193A22494C3FB00F9F0F4 /* libShaderCross.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 369193592494B5A700F9F0F4 /* libShaderCross.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3645F629249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4479D714E9784B66B1DDD757;
+			remoteInfo = glslang;
+		};
+		3645F62B249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D224D0B91AE745EBB04C4D65;
+			remoteInfo = OSDependent;
+		};
+		3645F62D249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BF4A791530CE400DBFDE4A95;
+			remoteInfo = OGLCompiler;
+		};
+		3645F62F249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8532EABA7A734BDA8DA91672;
+			remoteInfo = "glslang-default-resource-limits";
+		};
+		3645F631249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A51AF2E6F8934939BF27BC47;
+			remoteInfo = glslangValidator;
+		};
+		3645F633249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DAB47D0A91D341BFBB59AC15;
+			remoteInfo = "spirv-remap";
+		};
+		3645F635249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5FACFF83E7B646658E5B8933;
+			remoteInfo = SPIRV;
+		};
+		3645F637249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0868759F28884A29A2B2D6FB;
+			remoteInfo = SPVRemapper;
+		};
+		3645F639249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9E63C63525CA412DB41CFE37;
+			remoteInfo = HLSL;
+		};
+		3645F64A249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 92D0571C543B44AE81403074;
+			remoteInfo = "spirv-cross";
+		};
+		3645F64C249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7F06778EC67D489494CCE836;
+			remoteInfo = "spirv-cross-c";
+		};
+		3645F64E249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CCC0BBBE4BDE4C5F879805B1;
+			remoteInfo = "spirv-cross-core";
+		};
+		3645F650249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 57626C292838442ABADDD841;
+			remoteInfo = "spirv-cross-cpp";
+		};
+		3645F652249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FECA61102E524B9EAD3DEAE9;
+			remoteInfo = "spirv-cross-glsl";
+		};
+		3645F654249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F7FF8BF120CF4A268D2D04D4;
+			remoteInfo = "spirv-cross-hlsl";
+		};
+		3645F656249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 383BC6F1513C4D07896E6915;
+			remoteInfo = "spirv-cross-msl";
+		};
+		3645F658249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 61A325CD021545A5B299A212;
+			remoteInfo = "spirv-cross-reflect";
+		};
+		3645F65A249DBD0000FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F834BAE3E0604E49B37E6893;
+			remoteInfo = "spirv-cross-util";
+		};
+		369193A32494C42100F9F0F4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 369178EC24949C8C00F9F0F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 369193582494B5A700F9F0F4;
+			remoteInfo = ShaderCrossLib;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		369193572494B5A700F9F0F4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3645F57F249B3B4B00FDF25F /* ShaderCross.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderCross.cpp; sourceTree = "<group>"; };
+		3645F580249B3B4B00FDF25F /* ShaderCross.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShaderCross.hpp; sourceTree = "<group>"; };
+		3645F582249B3B5900FDF25F /* glslang.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = glslang.xcodeproj; path = ShaderCross/Libraries/glslang/build/glslang.xcodeproj; sourceTree = "<group>"; };
+		3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "SPIRV-Cross.xcodeproj"; path = "ShaderCross/Libraries/SPIRV-Cross/build/SPIRV-Cross.xcodeproj"; sourceTree = "<group>"; };
+		3645F5D5249B6DC500FDF25F /* d3dx9_mini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = d3dx9_mini.h; sourceTree = "<group>"; };
+		3645F5D6249B6DC500FDF25F /* MetalTranslator2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetalTranslator2.cpp; sourceTree = "<group>"; };
+		3645F5D7249B6DC500FDF25F /* GlslTranslator2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlslTranslator2.cpp; sourceTree = "<group>"; };
+		3645F5D8249B6DC500FDF25F /* JavaScriptTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JavaScriptTranslator.h; sourceTree = "<group>"; };
+		3645F5D9249B6DC500FDF25F /* AgalTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgalTranslator.h; sourceTree = "<group>"; };
+		3645F5DA249B6DC500FDF25F /* AgalTranslator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AgalTranslator.cpp; sourceTree = "<group>"; };
+		3645F5DC249B6DC500FDF25F /* MetalTranslator2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalTranslator2.h; sourceTree = "<group>"; };
+		3645F5DD249B6DC500FDF25F /* VarListTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VarListTranslator.h; sourceTree = "<group>"; };
+		3645F5DE249B6DC500FDF25F /* HlslTranslator2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HlslTranslator2.h; sourceTree = "<group>"; };
+		3645F5DF249B6DC500FDF25F /* GlslTranslator2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlslTranslator2.h; sourceTree = "<group>"; };
+		3645F5E0249B6DC500FDF25F /* SpirVTranslator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpirVTranslator.cpp; sourceTree = "<group>"; };
+		3645F5E1249B6DC500FDF25F /* D3D9Compiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = D3D9Compiler.cpp; sourceTree = "<group>"; };
+		3645F5E2249B6DC500FDF25F /* GlslFunctionStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlslFunctionStrings.h; sourceTree = "<group>"; };
+		3645F5E4249B6DC500FDF25F /* SpirVTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpirVTranslator.h; sourceTree = "<group>"; };
+		3645F5E5249B6DC500FDF25F /* Translator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Translator.cpp; sourceTree = "<group>"; };
+		3645F5E7249B6DC500FDF25F /* D3D11Compiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = D3D11Compiler.cpp; sourceTree = "<group>"; };
+		3645F5E8249B6DC500FDF25F /* HlslTranslator2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HlslTranslator2.cpp; sourceTree = "<group>"; };
+		3645F5EB249B6DC500FDF25F /* Translator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Translator.h; sourceTree = "<group>"; };
+		3645F5ED249B6DC500FDF25F /* VarListTranslator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VarListTranslator.cpp; sourceTree = "<group>"; };
+		369193592494B5A700F9F0F4 /* libShaderCross.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libShaderCross.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		369193842494B76700F9F0F4 /* ShaderCrossTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShaderCrossTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		369193862494B76700F9F0F4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		369193872494B76700F9F0F4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		369193892494B76700F9F0F4 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		3691938A2494B76700F9F0F4 /* Renderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Renderer.mm; sourceTree = "<group>"; };
+		3691938C2494B76700F9F0F4 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		3691938D2494B76700F9F0F4 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		3691938F2494B76700F9F0F4 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		369193912494B76700F9F0F4 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
+		369193932494B76700F9F0F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		369193952494B76900F9F0F4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		369193982494B76900F9F0F4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3691939A2494B76900F9F0F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3691939B2494B76900F9F0F4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		369193A02494B7C100F9F0F4 /* ShaderCrossTest.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShaderCrossTest.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		369193562494B5A700F9F0F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3645F65C249DBF6B00FDF25F /* libglslang-default-resource-limits.a in Frameworks */,
+				3645F65D249DBF6B00FDF25F /* libglslang.a in Frameworks */,
+				3645F65E249DBF6B00FDF25F /* libHLSL.a in Frameworks */,
+				3645F65F249DBF6B00FDF25F /* libOGLCompiler.a in Frameworks */,
+				3645F660249DBF6B00FDF25F /* libOSDependent.a in Frameworks */,
+				3645F661249DBF6B00FDF25F /* libSPIRV.a in Frameworks */,
+				3645F662249DBF6B00FDF25F /* libSPVRemapper.a in Frameworks */,
+				3645F663249DBF6B00FDF25F /* libspirv-cross-c.a in Frameworks */,
+				3645F664249DBF6B00FDF25F /* libspirv-cross-core.a in Frameworks */,
+				3645F665249DBF6B00FDF25F /* libspirv-cross-cpp.a in Frameworks */,
+				3645F666249DBF6B00FDF25F /* libspirv-cross-glsl.a in Frameworks */,
+				3645F667249DBF6B00FDF25F /* libspirv-cross-hlsl.a in Frameworks */,
+				3645F668249DBF6B00FDF25F /* libspirv-cross-msl.a in Frameworks */,
+				3645F669249DBF6B00FDF25F /* libspirv-cross-reflect.a in Frameworks */,
+				3645F66A249DBF6B00FDF25F /* libspirv-cross-util.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		369193812494B76700F9F0F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				369193A22494C3FB00F9F0F4 /* libShaderCross.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3645F5D4249B6DC500FDF25F /* Translators */ = {
+			isa = PBXGroup;
+			children = (
+				3645F5D5249B6DC500FDF25F /* d3dx9_mini.h */,
+				3645F5D6249B6DC500FDF25F /* MetalTranslator2.cpp */,
+				3645F5D7249B6DC500FDF25F /* GlslTranslator2.cpp */,
+				3645F5D8249B6DC500FDF25F /* JavaScriptTranslator.h */,
+				3645F5D9249B6DC500FDF25F /* AgalTranslator.h */,
+				3645F5DA249B6DC500FDF25F /* AgalTranslator.cpp */,
+				3645F5DC249B6DC500FDF25F /* MetalTranslator2.h */,
+				3645F5DD249B6DC500FDF25F /* VarListTranslator.h */,
+				3645F5DE249B6DC500FDF25F /* HlslTranslator2.h */,
+				3645F5DF249B6DC500FDF25F /* GlslTranslator2.h */,
+				3645F5E0249B6DC500FDF25F /* SpirVTranslator.cpp */,
+				3645F5E1249B6DC500FDF25F /* D3D9Compiler.cpp */,
+				3645F5E2249B6DC500FDF25F /* GlslFunctionStrings.h */,
+				3645F5E4249B6DC500FDF25F /* SpirVTranslator.h */,
+				3645F5E5249B6DC500FDF25F /* Translator.cpp */,
+				3645F5E7249B6DC500FDF25F /* D3D11Compiler.cpp */,
+				3645F5E8249B6DC500FDF25F /* HlslTranslator2.cpp */,
+				3645F5EB249B6DC500FDF25F /* Translator.h */,
+				3645F5ED249B6DC500FDF25F /* VarListTranslator.cpp */,
+			);
+			path = Translators;
+			sourceTree = "<group>";
+		};
+		3645F616249DBCEF00FDF25F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3645F62A249DBCEF00FDF25F /* libglslang.a */,
+				3645F62C249DBCEF00FDF25F /* libOSDependent.a */,
+				3645F62E249DBCEF00FDF25F /* libOGLCompiler.a */,
+				3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */,
+				3645F632249DBCEF00FDF25F /* glslangValidator */,
+				3645F634249DBCEF00FDF25F /* spirv-remap */,
+				3645F636249DBCEF00FDF25F /* libSPIRV.a */,
+				3645F638249DBCEF00FDF25F /* libSPVRemapper.a */,
+				3645F63A249DBCEF00FDF25F /* libHLSL.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3645F63B249DBD0000FDF25F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3645F64B249DBD0000FDF25F /* spirv-cross */,
+				3645F64D249DBD0000FDF25F /* libspirv-cross-c.a */,
+				3645F64F249DBD0000FDF25F /* libspirv-cross-core.a */,
+				3645F651249DBD0000FDF25F /* libspirv-cross-cpp.a */,
+				3645F653249DBD0000FDF25F /* libspirv-cross-glsl.a */,
+				3645F655249DBD0000FDF25F /* libspirv-cross-hlsl.a */,
+				3645F657249DBD0000FDF25F /* libspirv-cross-msl.a */,
+				3645F659249DBD0000FDF25F /* libspirv-cross-reflect.a */,
+				3645F65B249DBD0000FDF25F /* libspirv-cross-util.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		369178EB24949C8C00F9F0F4 = {
+			isa = PBXGroup;
+			children = (
+				3645F582249B3B5900FDF25F /* glslang.xcodeproj */,
+				3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */,
+				369178F624949C8C00F9F0F4 /* ShaderCross */,
+				369193852494B76700F9F0F4 /* ShaderCrossTest */,
+				369178F524949C8C00F9F0F4 /* Products */,
+				3691924A2494A1EE00F9F0F4 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		369178F524949C8C00F9F0F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				369193592494B5A700F9F0F4 /* libShaderCross.a */,
+				369193842494B76700F9F0F4 /* ShaderCrossTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		369178F624949C8C00F9F0F4 /* ShaderCross */ = {
+			isa = PBXGroup;
+			children = (
+				3645F5D4249B6DC500FDF25F /* Translators */,
+				3645F57F249B3B4B00FDF25F /* ShaderCross.cpp */,
+				3645F580249B3B4B00FDF25F /* ShaderCross.hpp */,
+			);
+			path = ShaderCross;
+			sourceTree = "<group>";
+		};
+		3691924A2494A1EE00F9F0F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		369193852494B76700F9F0F4 /* ShaderCrossTest */ = {
+			isa = PBXGroup;
+			children = (
+				369193A02494B7C100F9F0F4 /* ShaderCrossTest.entitlements */,
+				369193862494B76700F9F0F4 /* AppDelegate.h */,
+				369193872494B76700F9F0F4 /* AppDelegate.m */,
+				369193892494B76700F9F0F4 /* Renderer.h */,
+				3691938A2494B76700F9F0F4 /* Renderer.mm */,
+				3691938C2494B76700F9F0F4 /* GameViewController.h */,
+				3691938D2494B76700F9F0F4 /* GameViewController.m */,
+				3691938F2494B76700F9F0F4 /* Shaders.metal */,
+				369193912494B76700F9F0F4 /* ShaderTypes.h */,
+				369193922494B76700F9F0F4 /* Main.storyboard */,
+				369193952494B76900F9F0F4 /* Assets.xcassets */,
+				369193972494B76900F9F0F4 /* LaunchScreen.storyboard */,
+				3691939A2494B76900F9F0F4 /* Info.plist */,
+				3691939B2494B76900F9F0F4 /* main.m */,
+			);
+			path = ShaderCrossTest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		369193582494B5A700F9F0F4 /* ShaderCross */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3691935F2494B5A700F9F0F4 /* Build configuration list for PBXNativeTarget "ShaderCross" */;
+			buildPhases = (
+				369193552494B5A700F9F0F4 /* Sources */,
+				369193562494B5A700F9F0F4 /* Frameworks */,
+				369193572494B5A700F9F0F4 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShaderCross;
+			productName = ShaderCrossLib;
+			productReference = 369193592494B5A700F9F0F4 /* libShaderCross.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		369193832494B76700F9F0F4 /* ShaderCrossTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3691939D2494B76900F9F0F4 /* Build configuration list for PBXNativeTarget "ShaderCrossTest" */;
+			buildPhases = (
+				369193802494B76700F9F0F4 /* Sources */,
+				369193812494B76700F9F0F4 /* Frameworks */,
+				369193822494B76700F9F0F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				369193A42494C42100F9F0F4 /* PBXTargetDependency */,
+			);
+			name = ShaderCrossTest;
+			productName = ShaderCrossTest;
+			productReference = 369193842494B76700F9F0F4 /* ShaderCrossTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		369178EC24949C8C00F9F0F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "John Millard";
+				TargetAttributes = {
+					369193582494B5A700F9F0F4 = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					369193832494B76700F9F0F4 = {
+						CreatedOnToolsVersion = 11.5;
+					};
+				};
+			};
+			buildConfigurationList = 369178EF24949C8C00F9F0F4 /* Build configuration list for PBXProject "ShaderCross" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 369178EB24949C8C00F9F0F4;
+			productRefGroup = 369178F524949C8C00F9F0F4 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 3645F616249DBCEF00FDF25F /* Products */;
+					ProjectRef = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+				},
+				{
+					ProductGroup = 3645F63B249DBD0000FDF25F /* Products */;
+					ProjectRef = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				369193582494B5A700F9F0F4 /* ShaderCross */,
+				369193832494B76700F9F0F4 /* ShaderCrossTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		3645F62A249DBCEF00FDF25F /* libglslang.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libglslang.a;
+			remoteRef = 3645F629249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F62C249DBCEF00FDF25F /* libOSDependent.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOSDependent.a;
+			remoteRef = 3645F62B249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F62E249DBCEF00FDF25F /* libOGLCompiler.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libOGLCompiler.a;
+			remoteRef = 3645F62D249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libglslang-default-resource-limits.a";
+			remoteRef = 3645F62F249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F632249DBCEF00FDF25F /* glslangValidator */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = glslangValidator;
+			remoteRef = 3645F631249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F634249DBCEF00FDF25F /* spirv-remap */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "spirv-remap";
+			remoteRef = 3645F633249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F636249DBCEF00FDF25F /* libSPIRV.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSPIRV.a;
+			remoteRef = 3645F635249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F638249DBCEF00FDF25F /* libSPVRemapper.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSPVRemapper.a;
+			remoteRef = 3645F637249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F63A249DBCEF00FDF25F /* libHLSL.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libHLSL.a;
+			remoteRef = 3645F639249DBCEF00FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F64B249DBD0000FDF25F /* spirv-cross */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "spirv-cross";
+			remoteRef = 3645F64A249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F64D249DBD0000FDF25F /* libspirv-cross-c.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-c.a";
+			remoteRef = 3645F64C249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F64F249DBD0000FDF25F /* libspirv-cross-core.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-core.a";
+			remoteRef = 3645F64E249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F651249DBD0000FDF25F /* libspirv-cross-cpp.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-cpp.a";
+			remoteRef = 3645F650249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F653249DBD0000FDF25F /* libspirv-cross-glsl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-glsl.a";
+			remoteRef = 3645F652249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F655249DBD0000FDF25F /* libspirv-cross-hlsl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-hlsl.a";
+			remoteRef = 3645F654249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F657249DBD0000FDF25F /* libspirv-cross-msl.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-msl.a";
+			remoteRef = 3645F656249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F659249DBD0000FDF25F /* libspirv-cross-reflect.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-reflect.a";
+			remoteRef = 3645F658249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3645F65B249DBD0000FDF25F /* libspirv-cross-util.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libspirv-cross-util.a";
+			remoteRef = 3645F65A249DBD0000FDF25F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		369193822494B76700F9F0F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				369193992494B76900F9F0F4 /* LaunchScreen.storyboard in Resources */,
+				369193962494B76900F9F0F4 /* Assets.xcassets in Resources */,
+				369193942494B76700F9F0F4 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		369193552494B5A700F9F0F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3645F5EF249B6DC500FDF25F /* GlslTranslator2.cpp in Sources */,
+				3645F5F4249B6DC500FDF25F /* Translator.cpp in Sources */,
+				3645F5EE249B6DC500FDF25F /* MetalTranslator2.cpp in Sources */,
+				3645F5F6249B6DC500FDF25F /* HlslTranslator2.cpp in Sources */,
+				3645F5F2249B6DC500FDF25F /* SpirVTranslator.cpp in Sources */,
+				3645F5F0249B6DC500FDF25F /* AgalTranslator.cpp in Sources */,
+				3645F5F5249B6DC500FDF25F /* D3D11Compiler.cpp in Sources */,
+				3645F5F9249B6DC500FDF25F /* VarListTranslator.cpp in Sources */,
+				3645F581249B3B4B00FDF25F /* ShaderCross.cpp in Sources */,
+				3645F5F3249B6DC500FDF25F /* D3D9Compiler.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		369193802494B76700F9F0F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3691939C2494B76900F9F0F4 /* main.m in Sources */,
+				369193902494B76700F9F0F4 /* Shaders.metal in Sources */,
+				3691938B2494B76700F9F0F4 /* Renderer.mm in Sources */,
+				3691938E2494B76700F9F0F4 /* GameViewController.m in Sources */,
+				369193882494B76700F9F0F4 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		369193A42494C42100F9F0F4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 369193582494B5A700F9F0F4 /* ShaderCross */;
+			targetProxy = 369193A32494C42100F9F0F4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		369193922494B76700F9F0F4 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				369193932494B76700F9F0F4 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		369193972494B76900F9F0F4 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				369193982494B76900F9F0F4 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		369178F924949C8C00F9F0F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		369178FA24949C8C00F9F0F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		369193602494B5A700F9F0F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5S3RZ43N7;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"ENABLE_HLSL=1",
+					"KRAFIX_LIBRARY=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/ShaderCross/Libraries/",
+					"$(SRCROOT)/ShaderCross/Libraries/glslang/",
+					"$(SRCROOT)/ShaderCross/Libraries/glslang/glslang/",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		369193612494B5A700F9F0F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5S3RZ43N7;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"ENABLE_HLSL=1",
+					"KRAFIX_LIBRARY=1",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/ShaderCross/Libraries/",
+					"$(SRCROOT)/ShaderCross/Libraries/glslang/",
+					"$(SRCROOT)/ShaderCross/Libraries/glslang/glslang/",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3691939E2494B76900F9F0F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ShaderCrossTest/ShaderCrossTest.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5S3RZ43N7;
+				INFOPLIST_FILE = ShaderCrossTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/ShaderCross/Libraries/ $(SRCROOT)/ShaderCross/Libraries/glslang/ $(SRCROOT)/ShaderCross/Translators/";
+				PRODUCT_BUNDLE_IDENTIFIER = com.twolivesleft.ShaderCrossTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3691939F2494B76900F9F0F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ShaderCrossTest/ShaderCrossTest.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = G5S3RZ43N7;
+				INFOPLIST_FILE = ShaderCrossTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/ShaderCross/Libraries/ $(SRCROOT)/ShaderCross/Libraries/glslang/ $(SRCROOT)/ShaderCross/Translators/";
+				PRODUCT_BUNDLE_IDENTIFIER = com.twolivesleft.ShaderCrossTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		369178EF24949C8C00F9F0F4 /* Build configuration list for PBXProject "ShaderCross" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				369178F924949C8C00F9F0F4 /* Debug */,
+				369178FA24949C8C00F9F0F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3691935F2494B5A700F9F0F4 /* Build configuration list for PBXNativeTarget "ShaderCross" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				369193602494B5A700F9F0F4 /* Debug */,
+				369193612494B5A700F9F0F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3691939D2494B76900F9F0F4 /* Build configuration list for PBXNativeTarget "ShaderCrossTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3691939E2494B76900F9F0F4 /* Debug */,
+				3691939F2494B76900F9F0F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 369178EC24949C8C00F9F0F4 /* Project object */;
+}
