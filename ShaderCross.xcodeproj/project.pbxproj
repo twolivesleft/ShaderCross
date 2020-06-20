@@ -170,6 +170,111 @@
 			remoteGlobalIDString = F834BAE3E0604E49B37E6893;
 			remoteInfo = "spirv-cross-util";
 		};
+		3645F673249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 347B0C86EC444122AE09DCC6;
+			remoteInfo = HLSL;
+		};
+		3645F675249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 19AF9F274F3243B99681B5BC;
+			remoteInfo = OGLCompiler;
+		};
+		3645F677249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CEA560DE31E242ECA1A50537;
+			remoteInfo = OSDependent;
+		};
+		3645F679249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DEB0D34FC944224A90531E5;
+			remoteInfo = SPIRV;
+		};
+		3645F67B249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F93904D03BCE423F8E879EF4;
+			remoteInfo = SPVRemapper;
+		};
+		3645F67D249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3A71DC6E393345B691D73A1A;
+			remoteInfo = glslang;
+		};
+		3645F67F249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B503F5A4F2DB4C3AB2B3FABA;
+			remoteInfo = "glslang-default-resource-limits";
+		};
+		3645F681249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = CB5B561178E244C2AC79550D;
+			remoteInfo = "spirv-cross-c";
+		};
+		3645F683249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 0E06A27CAEFF403B8493F309;
+			remoteInfo = "spirv-cross-core";
+		};
+		3645F685249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D6F5CEA49C6843B49076096A;
+			remoteInfo = "spirv-cross-cpp";
+		};
+		3645F687249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8BBBB5578BEE482681A34BA7;
+			remoteInfo = "spirv-cross-glsl";
+		};
+		3645F689249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 75C57BD5618946F48FB9944C;
+			remoteInfo = "spirv-cross-hlsl";
+		};
+		3645F68B249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BC266FD0CFE44DEC90644EA9;
+			remoteInfo = "spirv-cross-msl";
+		};
+		3645F68D249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A09CFF14E3CF4EB8AA78C7A6;
+			remoteInfo = "spirv-cross-reflect";
+		};
+		3645F68F249DC7A700FDF25F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E6811D30EB2450183A47677;
+			remoteInfo = "spirv-cross-util";
+		};
 		369193A32494C42100F9F0F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 369178EC24949C8C00F9F0F4 /* Project object */;
@@ -398,6 +503,21 @@
 			buildRules = (
 			);
 			dependencies = (
+				3645F674249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F676249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F678249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F67A249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F67C249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F67E249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F680249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F682249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F684249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F686249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F688249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F68A249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F68C249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F68E249DC7A700FDF25F /* PBXTargetDependency */,
+				3645F690249DC7A700FDF25F /* PBXTargetDependency */,
 			);
 			name = ShaderCross;
 			productName = ShaderCrossLib;
@@ -643,6 +763,81 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3645F674249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = HLSL;
+			targetProxy = 3645F673249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F676249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OGLCompiler;
+			targetProxy = 3645F675249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F678249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OSDependent;
+			targetProxy = 3645F677249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F67A249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SPIRV;
+			targetProxy = 3645F679249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F67C249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SPVRemapper;
+			targetProxy = 3645F67B249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F67E249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = glslang;
+			targetProxy = 3645F67D249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F680249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "glslang-default-resource-limits";
+			targetProxy = 3645F67F249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F682249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-c";
+			targetProxy = 3645F681249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F684249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-core";
+			targetProxy = 3645F683249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F686249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-cpp";
+			targetProxy = 3645F685249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F688249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-glsl";
+			targetProxy = 3645F687249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F68A249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-hlsl";
+			targetProxy = 3645F689249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F68C249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-msl";
+			targetProxy = 3645F68B249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F68E249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-reflect";
+			targetProxy = 3645F68D249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
+		3645F690249DC7A700FDF25F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "spirv-cross-util";
+			targetProxy = 3645F68F249DC7A700FDF25F /* PBXContainerItemProxy */;
+		};
 		369193A42494C42100F9F0F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 369193582494B5A700F9F0F4 /* ShaderCross */;
