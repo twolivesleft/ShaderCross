@@ -73,6 +73,44 @@ namespace ShaderCross
         EOptionKeepUncalled = (1 << 22),
     };
 
+    class CustomIncluder : public glslang::TShader::Includer
+    {
+    public:
+        
+        CustomIncluder(IncludeCallback callback) : m_callback(callback)
+        {
+            
+        }
+        
+        IncludeResult* include(const char* headerName, const char* includerName, size_t inclusionDepth, bool local) {
+            
+            auto content = m_callback(headerName, local);
+            std::string filecontent = content.second;
+            char* heapcontent = new char[filecontent.size() + 1];
+            strcpy(heapcontent, filecontent.c_str());
+            return new IncludeResult(content.first, heapcontent, content.second.size(), heapcontent);
+        }
+        
+        IncludeResult* includeSystem(const char* headerName, const char* includerName, size_t inclusionDepth) override {
+            return include(headerName, includerName, inclusionDepth, false);
+        }
+
+        IncludeResult* includeLocal(const char* headerName, const char* includerName, size_t inclusionDepth) override {
+            return include(headerName, includerName, inclusionDepth, true);
+        }
+        
+        void releaseInclude(IncludeResult* result) override {
+            if (result)
+            {
+                delete (char*)result->userData;
+                delete result;
+            }
+        }
+        
+    private:
+        IncludeCallback m_callback;
+    };
+
     class KrafixIncluder : public glslang::TShader::Includer
     {
     public:
@@ -538,7 +576,11 @@ namespace ShaderCross
     {
         glslang::TShader::Includer* includer = nullptr;
         
-        if (config.includePath.length() > 0)
+        if (config.includeCallback)
+        {
+            includer = new CustomIncluder(*config.includeCallback);
+        }
+        else if (config.includePath.length() > 0)
         {
             includer = new KrafixIncluder(config.includePath);
         }

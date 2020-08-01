@@ -16,6 +16,9 @@
 
 namespace ShaderCross
 {
+    typedef std::pair<std::string, std::string> IncludeCallbackResult;
+    typedef std::function<IncludeCallbackResult(const char* headerName, bool local)> IncludeCallback;
+
     enum TargetLanguage {
         SpirV,
         GLSL,
@@ -93,6 +96,7 @@ namespace ShaderCross
         std::string sourceName;
         std::string defines;
         std::string includePath;
+        IncludeCallback* includeCallback;
     };
 
     struct Result
