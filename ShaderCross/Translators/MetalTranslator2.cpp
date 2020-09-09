@@ -72,7 +72,7 @@ void MetalTranslator2::outputCode(const Target& target, const char* sourcefilena
 		opts.es = target.es;
 		opts.force_temporary = false;
 		opts.vulkan_semantics = false;
-		opts.vertex.fixup_clipspace = true;
+		opts.vertex.fixup_clipspace = false;
 		compiler->set_common_options(opts);
 	}
 
@@ -80,6 +80,7 @@ void MetalTranslator2::outputCode(const Target& target, const char* sourcefilena
 		spirv_cross::CompilerMSL::Options opts = compiler->get_msl_options();
 		opts.platform = target.system == iOS ? spirv_cross::CompilerMSL::Options::iOS : spirv_cross::CompilerMSL::Options::macOS;
 		opts.enable_decoration_binding = true;
+        
         opts.force_native_arrays = true;
 		compiler->set_msl_options(opts);
 	}
