@@ -17,7 +17,6 @@
 		3645F5F5249B6DC500FDF25F /* D3D11Compiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E7249B6DC500FDF25F /* D3D11Compiler.cpp */; };
 		3645F5F6249B6DC500FDF25F /* HlslTranslator2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5E8249B6DC500FDF25F /* HlslTranslator2.cpp */; };
 		3645F5F9249B6DC500FDF25F /* VarListTranslator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3645F5ED249B6DC500FDF25F /* VarListTranslator.cpp */; };
-		3645F707249E5F1C00FDF25F /* libglslang-default-resource-limits.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */; };
 		3645F708249E5F1D00FDF25F /* libglslang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F62A249DBCEF00FDF25F /* libglslang.a */; };
 		3645F709249E5F1D00FDF25F /* libHLSL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F63A249DBCEF00FDF25F /* libHLSL.a */; };
 		3645F70A249E5F1D00FDF25F /* libOGLCompiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3645F62E249DBCEF00FDF25F /* libOGLCompiler.a */; };
@@ -64,27 +63,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = BF4A791530CE400DBFDE4A95;
 			remoteInfo = OGLCompiler;
-		};
-		3645F62F249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8532EABA7A734BDA8DA91672;
-			remoteInfo = "glslang-default-resource-limits";
-		};
-		3645F631249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A51AF2E6F8934939BF27BC47;
-			remoteInfo = glslangValidator;
-		};
-		3645F633249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DAB47D0A91D341BFBB59AC15;
-			remoteInfo = "spirv-remap";
 		};
 		3645F635249DBCEF00FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -174,105 +152,98 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = BE8D4AE8DC614EFFAB13DAA9;
+			remoteGlobalIDString = C03C9D3848CF46E496A94A57;
 			remoteInfo = HLSL;
 		};
 		3645F6EB249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = DEB375F0366A461EBD741389;
+			remoteGlobalIDString = 9E95B61B14274D5887AC5FE4;
 			remoteInfo = OGLCompiler;
 		};
 		3645F6ED249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F2C0BAF3290E4AC793E32D15;
+			remoteGlobalIDString = A1285142BFF1438282F5B0AB;
 			remoteInfo = OSDependent;
 		};
 		3645F6EF249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = B85EC4EFF99B4207ACE4DF4D;
+			remoteGlobalIDString = 05B769C491034920A3652456;
 			remoteInfo = SPIRV;
 		};
 		3645F6F1249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 170541FE3A284DBF9637F93B;
+			remoteGlobalIDString = 35AE6F6762C54499935E8EB2;
 			remoteInfo = SPVRemapper;
 		};
 		3645F6F3249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = AC6F7F5B8BF64A7798F96586;
+			remoteGlobalIDString = DC6006B134EE408989541976;
 			remoteInfo = glslang;
-		};
-		3645F6F5249E5F1400FDF25F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 0CC43DDFD49A4E8E94166642;
-			remoteInfo = "glslang-default-resource-limits";
 		};
 		3645F6F7249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 51962F1245924B8F96CF954F;
+			remoteGlobalIDString = B91571A12E1548CAB68EA83C;
 			remoteInfo = "spirv-cross-c";
 		};
 		3645F6F9249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 2D0037C1CAA54D988364D40D;
+			remoteGlobalIDString = 424C0605CE7E41A9B78DD6AA;
 			remoteInfo = "spirv-cross-core";
 		};
 		3645F6FB249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 7369D0310A99439A942D3B5A;
+			remoteGlobalIDString = 17BE0351E3C148A7B2AFE4F8;
 			remoteInfo = "spirv-cross-cpp";
 		};
 		3645F6FD249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = DE121FF079034DAC99BEAC23;
+			remoteGlobalIDString = 1341528A9B0D4878A9DDE682;
 			remoteInfo = "spirv-cross-glsl";
 		};
 		3645F6FF249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 6BCFB52246A54FAC84383488;
+			remoteGlobalIDString = 3F02ABE52DF64C9AAC94C940;
 			remoteInfo = "spirv-cross-hlsl";
 		};
 		3645F701249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 68258FAB30EE49368DAFF868;
+			remoteGlobalIDString = EA53B04FF3554976870CA184;
 			remoteInfo = "spirv-cross-msl";
 		};
 		3645F703249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 17185CDBC7E044FA9B202D4B;
+			remoteGlobalIDString = 3491DABE10624958BB90AF07;
 			remoteInfo = "spirv-cross-reflect";
 		};
 		3645F705249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 59129A8C28724918819A3219;
+			remoteGlobalIDString = C4D4663EE5A14F4FA1BE29F2;
 			remoteInfo = "spirv-cross-util";
 		};
 		369193A32494C42100F9F0F4 /* PBXContainerItemProxy */ = {
@@ -343,7 +314,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3645F707249E5F1C00FDF25F /* libglslang-default-resource-limits.a in Frameworks */,
 				3645F708249E5F1D00FDF25F /* libglslang.a in Frameworks */,
 				3645F709249E5F1D00FDF25F /* libHLSL.a in Frameworks */,
 				3645F70A249E5F1D00FDF25F /* libOGLCompiler.a in Frameworks */,
@@ -401,15 +371,12 @@
 		3645F616249DBCEF00FDF25F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3645F62A249DBCEF00FDF25F /* libglslang.a */,
-				3645F62C249DBCEF00FDF25F /* libOSDependent.a */,
+				3645F63A249DBCEF00FDF25F /* libHLSL.a */,
 				3645F62E249DBCEF00FDF25F /* libOGLCompiler.a */,
-				3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */,
-				3645F632249DBCEF00FDF25F /* glslangValidator */,
-				3645F634249DBCEF00FDF25F /* spirv-remap */,
+				3645F62C249DBCEF00FDF25F /* libOSDependent.a */,
 				3645F636249DBCEF00FDF25F /* libSPIRV.a */,
 				3645F638249DBCEF00FDF25F /* libSPVRemapper.a */,
-				3645F63A249DBCEF00FDF25F /* libHLSL.a */,
+				3645F62A249DBCEF00FDF25F /* libglslang.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -509,7 +476,6 @@
 				3645F6F0249E5F1400FDF25F /* PBXTargetDependency */,
 				3645F6F2249E5F1400FDF25F /* PBXTargetDependency */,
 				3645F6F4249E5F1400FDF25F /* PBXTargetDependency */,
-				3645F6F6249E5F1400FDF25F /* PBXTargetDependency */,
 				3645F6F8249E5F1400FDF25F /* PBXTargetDependency */,
 				3645F6FA249E5F1400FDF25F /* PBXTargetDependency */,
 				3645F6FC249E5F1400FDF25F /* PBXTargetDependency */,
@@ -610,27 +576,6 @@
 			remoteRef = 3645F62D249DBCEF00FDF25F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		3645F630249DBCEF00FDF25F /* libglslang-default-resource-limits.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libglslang-default-resource-limits.a";
-			remoteRef = 3645F62F249DBCEF00FDF25F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3645F632249DBCEF00FDF25F /* glslangValidator */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = glslangValidator;
-			remoteRef = 3645F631249DBCEF00FDF25F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3645F634249DBCEF00FDF25F /* spirv-remap */ = {
-			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			path = "spirv-remap";
-			remoteRef = 3645F633249DBCEF00FDF25F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		3645F636249DBCEF00FDF25F /* libSPIRV.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -655,7 +600,8 @@
 		3645F64B249DBD0000FDF25F /* spirv-cross */ = {
 			isa = PBXReferenceProxy;
 			fileType = "compiled.mach-o.executable";
-			path = "spirv-cross";
+			name = "spirv-cross";
+			path = "spirv-cross.app";
 			remoteRef = 3645F64A249DBD0000FDF25F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -792,11 +738,6 @@
 			isa = PBXTargetDependency;
 			name = glslang;
 			targetProxy = 3645F6F3249E5F1400FDF25F /* PBXContainerItemProxy */;
-		};
-		3645F6F6249E5F1400FDF25F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "glslang-default-resource-limits";
-			targetProxy = 3645F6F5249E5F1400FDF25F /* PBXContainerItemProxy */;
 		};
 		3645F6F8249E5F1400FDF25F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
