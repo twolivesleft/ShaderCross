@@ -298,7 +298,6 @@ namespace ShaderCross
         std::list<glslang::TShader*> shaders;
 
         EShMessages messages = EShMsgDefault;
-//        SetMessageOptions(messages);
 
         //
         // Per-shader processing...
@@ -312,63 +311,22 @@ namespace ShaderCross
             const auto& compUnit = *it;
             glslang::TShader* shader = new glslang::TShader(compUnit.stage);
             shader->setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
-//            if (entryPointName) // HLSL todo: this needs to be tracked per compUnits
-//                shader->setEntryPoint(entryPointName);
-//            if (sourceEntryPointName)
-//                shader->setSourceEntryPoint(sourceEntryPointName);
-
-//            shader->setShiftSamplerBinding(baseSamplerBinding[compUnit.stage]);
-//            shader->setShiftTextureBinding(baseTextureBinding[compUnit.stage]);
-//            shader->setShiftImageBinding(baseImageBinding[compUnit.stage]);
-//            shader->setShiftUboBinding(baseUboBinding[compUnit.stage]);
-//            shader->setShiftSsboBinding(baseSsboBinding[compUnit.stage]);
-//            shader->setFlattenUniformArrays((Options & EOptionFlattenUniformArrays) != 0);
-//            shader->setNoStorageFormat((Options & EOptionNoStorageFormat) != 0);
             shader->setPreamble(defines);
-
-//            if (Options & EOptionAutoMapBindings)
             shader->setAutoMapBindings(true);
 
             shaders.push_back(shader);
 
             const int defaultVersion = 100; // Options & EOptionDefaultDesktop ? 110 : 100;
 
-//            if (Options & EOptionOutputPreprocessed) {
-//                std::string str;
-//                //glslang::TShader::ForbidIncluder includer;
-//                if (shader->preprocess(&Resources, defaultVersion, ENoProfile, false, false,
-//                    messages, &str, includer)) {
-//                    PutsIfNonEmpty(str.c_str());
-//                }
-//                else {
-//                    CompileFailed = true;
-//                }
-//                StderrIfNonEmpty(shader->getInfoLog());
-//                StderrIfNonEmpty(shader->getInfoDebugLog());
-//                continue;
-//            }
+            shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
             
-//            shader->setEnvInput((Options & EOptionReadHlsl) ? glslang::EShSourceHlsl
-//                                                            :
-//                                compUnit.stage, Client, ClientInputSemanticsVersion);
-//            shader->setEnvClient(Client, ClientVersion);
-            shader->setEnvTarget(glslang::EshTargetSpv, glslang::EShTargetSpv_1_0);
-
-            
-            if (!shader->parse(&glslang::DefaultTBuiltInResource, defaultVersion, ENoProfile, false, false, messages, includer))
+            if (!shader->parse(&glslang::DefaultTBuiltInResource, defaultVersion, EEsProfile, false, false, messages, includer))
             {
                 compileFailed = true;
                 result.errors += shader->getInfoLog();
             }
 
             program.addShader(shader);
-
-//            if (!(Options & EOptionSuppressInfolog) &&
-//                !(Options & EOptionMemoryLeakMode)) {
-//                //PutsIfNonEmpty(compUnit.fileName.c_str());
-//                PutsIfNonEmpty(shader->getInfoLog());
-//                PutsIfNonEmpty(shader->getInfoDebugLog());
-//            }
         }
 
         //
@@ -387,19 +345,6 @@ namespace ShaderCross
             linkFailed = true;
         }
         
-//        // Report
-//        if (!(Options & EOptionSuppressInfolog) &&
-//            !(Options & EOptionMemoryLeakMode)) {
-//            PutsIfNonEmpty(program.getInfoLog());
-//            PutsIfNonEmpty(program.getInfoDebugLog());
-//        }
-
-        // Reflect
-//        if (Options & EOptionDumpReflection) {
-//            program.buildReflection();
-//            program.dumpReflection();
-//        }
-
         // Dump SPIR-V
         if (compileFailed || linkFailed)
         {
