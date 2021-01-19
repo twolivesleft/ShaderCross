@@ -743,7 +743,7 @@ namespace ShaderCross
                                   *includer,
                                   defines.c_str());
 
-        glslang::FinalizeProcess();
+        //glslang::FinalizeProcess();
 
         if (includer) delete includer;
     }

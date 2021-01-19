@@ -12,7 +12,7 @@
 		<key>ShaderCross.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>56</integer>
+			<integer>47</integer>
 		</dict>
 		<key>ShaderCrossLib copy.xcscheme_^#shared#^_</key>
 		<dict>
@@ -27,7 +27,7 @@
 		<key>ShaderCrossTest.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>66</integer>
+			<integer>48</integer>
 		</dict>
 	</dict>
 </dict>
