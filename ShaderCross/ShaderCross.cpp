@@ -621,15 +621,7 @@ namespace ShaderCross
                                           includer,
                                           defines);
             }
-
-//            if (Options & EOptionMemoryLeakMode)
-//                glslang::OS_DumpMemoryCounters();
         }
-
-//        if (source == nullptr) {
-//            for (auto it = compUnits.begin(); it != compUnits.end(); ++it)
-//                FreeFileData(it->text);
-//        }
     }
 
     void Compile(const Config& config, Result& result)
