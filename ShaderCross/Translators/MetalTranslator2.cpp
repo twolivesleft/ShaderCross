@@ -5,25 +5,6 @@
 using namespace ShaderCross;
 
 namespace {
-	std::string extractFilename(std::string path) {
-		int i = (int)path.size() - 1;
-		for (; i > 0; --i) {
-			if (path[i] == '/' || path[i] == '\\') {
-				++i;
-				break;
-			}
-		}
-		return path.substr(i, std::string::npos);
-	}
-
-	std::string replace(std::string str, char c1, char c2) {
-		std::string ret = str;
-		for (unsigned i = 0; i < str.length(); ++i) {
-			if (str[i] == c1) ret[i] = c2;
-		}
-		return ret;
-	}
-
 	spv::ExecutionModel convert(ShaderStage stage) {
 		switch (stage) {
 		case StageVertex:
@@ -56,12 +37,6 @@ void MetalTranslator2::outputCode(const Target& target, const char* sourcefilena
 	}
 
 	spirv_cross::CompilerMSL* compiler = new spirv_cross::CompilerMSL(spirv);
-
-//    std::string name = "xlatMtlMain";
-//    extractFilename(sourcefilename);
-//	name = name.substr(0, name.find_last_of("."));
-//	name = replace(name, '-', '_');
-//	name = replace(name, '.', '_');
 
 	compiler->set_entry_point("main", convert(stage));
 	compiler->rename_entry_point("main", "xlatMtlMain", convert(stage));

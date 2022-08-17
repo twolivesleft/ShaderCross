@@ -310,77 +310,7 @@ namespace ShaderCross
 
     };
 
-//    // TODO: Find out what the hell this thing does
-//    static void preprocessSpirv(std::vector<unsigned int>& spirv)
-//    {
-//        unsigned binding = 0;
-//        for (unsigned index = 0; index < spirv.size(); ++index)
-//        {
-//            int wordCount = spirv[index] >> 16;
-//            int opcode = spirv[index] & 0xffff;
-//
-//            unsigned* operands = wordCount > 1 ? &spirv[index + 1] : NULL;
-//            int length = wordCount - 1;
-//
-//            if (opcode == 71 && length >= 2)
-//            {
-//                if (operands[1] == 33)
-//                {
-//                    operands[2] = binding++;
-//                }
-//            }
-//        }
-//    }
-
     static char s_compilerOutputBuffer[1024*1024];
-
-    //
-    //   Deduce the language from the filename.  Files must end in one of the
-    //   following extensions:
-    //
-    //   .vert = vertex
-    //   .tesc = tessellation control
-    //   .tese = tessellation evaluation
-    //   .geom = geometry
-    //   .frag = fragment
-    //   .comp = compute
-    //
-    EShLanguage FindLanguage(const std::string& name, bool parseSuffix)
-    {
-        size_t ext = 0;
-        std::string suffix;
-
-        // Search for a suffix on a filename: e.g, "myfile.frag".  If given
-        // the suffix directly, we skip looking for the '.'
-        if (parseSuffix) {
-            ext = name.rfind('.');
-            if (ext == std::string::npos) {
-                return EShLangVertex;
-            }
-            ++ext;
-        }
-        suffix = name.substr(ext, std::string::npos);
-
-        if (suffix == "glsl") {
-            size_t ext2 = name.substr(0, ext - 1).rfind('.');
-            suffix = name.substr(ext2 + 1, ext - ext2 - 2);
-        }
-
-        if (suffix == "vert")
-            return EShLangVertex;
-        else if (suffix == "tesc")
-            return EShLangTessControl;
-        else if (suffix == "tese")
-            return EShLangTessEvaluation;
-        else if (suffix == "geom")
-            return EShLangGeometry;
-        else if (suffix == "frag")
-            return EShLangFragment;
-        else if (suffix == "comp")
-            return EShLangCompute;
-        
-        return EShLangVertex;
-    }
 
     ShaderStage shLanguageToShaderStage(EShLanguage lang)
     {
@@ -403,7 +333,6 @@ namespace ShaderCross
                                    Target target,
                                    const char* sourcefilename,
                                    const char* filename,
-                                   const char* tempdir,
                                    glslang::TShader::Includer& includer,
                                    const char* defines)
     {
@@ -468,21 +397,22 @@ namespace ShaderCross
         }
         else
         {
-            for (int stage = 0; stage < EShLangCount; ++stage) {
-                if (program.getIntermediate((EShLanguage)stage)) {
+            int outputIndex = 0;
+            for (int stage = 0; stage < EShLangCount; ++stage)
+            {
+                if (program.getIntermediate((EShLanguage)stage))
+                {
                     std::vector<unsigned int> spirv;
                     std::string warningsErrors;
                     spv::SpvBuildLogger logger;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger);
 
-//                    preprocessSpirv(spirv);
-
                     Translator* translator = NULL;
                     ShaderStage shaderStage = shLanguageToShaderStage((EShLanguage)stage);
                     std::map<std::string, int> attributes;
                     
-                    
-                    switch (target.lang) {
+                    switch (target.lang)
+                    {
                     case SpirV:
                         translator = new SpirVTranslator(spirv, shaderStage);
                         break;
@@ -505,30 +435,12 @@ namespace ShaderCross
                         break;
                     }
 
-                    try {
-                        if (target.lang == HLSL && target.system != Unity) {
-                            // TODO: put this back in
-//                            std::string temp = sourcefilename == nullptr ? "" : std::string(tempdir) + "/" + removeExtension(extractFilename(sourcefilename)) + ".hlsl";
-//                            char* tempoutput = nullptr;
-//                            if (output) {
-//                                tempoutput = new char[1024 * 1024];
-//                            }
-//                            translator->outputCode(target, sourcefilename, temp.c_str(), tempoutput, attributes);
-//                            int returnCode = 0;
-//                            if (target.version == 9) {
-//                                returnCode = compileHLSLToD3D9(temp.c_str(), filename, tempoutput, output, length, attributes, (EShLanguage)stage);
-//                            }
-//                            else {
-//                                returnCode = compileHLSLToD3D11(temp.c_str(), filename, tempoutput, output, length, attributes, (EShLanguage)stage, debugMode);
-//                            }
-//                            if (returnCode != 0) CompileFailed = true;
-//                            delete[] tempoutput;
-                        }
-                        else {
-                            translator->outputCode(target, sourcefilename, filename, s_compilerOutputBuffer, attributes);
-                            result.output = s_compilerOutputBuffer;
-                            result.success = true;
-                        }
+                    try
+                    {
+                        translator->outputCode(target, sourcefilename, filename, s_compilerOutputBuffer, attributes);
+                        result.output[outputIndex] = s_compilerOutputBuffer;
+                        result.success = true;
+                        result.resultCount = 1;
                     }
                     catch (spirv_cross::CompilerError& error) {
                         printf("Error compiling to %s: %s\n", target.string().c_str(), error.what());
@@ -544,15 +456,12 @@ namespace ShaderCross
                         spirv_cross::CompilerReflection compiler(std::move(spirv_parser.get_parsed_ir()));
                         compiler.set_format("json");
                         
-                        result.json = compiler.compile();
+                        result.json[outputIndex] = compiler.compile();
                     }
 
+                    outputIndex++;
+                    
                     delete translator;
-
-                    //glslang::OutputSpv(spirv, GetBinaryName((EShLanguage)stage));
-//                    if (Options & EOptionHumanReadableSpv) {
-//                        spv::Disassemble(std::cout, spirv);
-//                    }
                 }
             }
         }
@@ -562,7 +471,8 @@ namespace ShaderCross
         // the stuff from the shaders has to have its destructors called
         // before the pools holding the memory in the shaders is freed.
         delete& program;
-        while (shaders.size() > 0) {
+        while (shaders.size() > 0)
+        {
             delete shaders.back();
             shaders.pop_back();
         }
@@ -570,58 +480,68 @@ namespace ShaderCross
 
     void CompileAndLinkShaderFiles(const Config& config,
                                    Result& result,
-                                   glslang::TWorklist& workList,
                                    Target target,
-                                   const char* sourcefilename,
-                                   const char* filename,
-                                   const char* tempdir,
                                    glslang::TShader::Includer& includer,
                                    const char* defines)
     {
         std::vector<ShaderCompUnit> compUnits;
 
-        // Transfer all the work items from to a simple list of
-        // of compilation units.  (We don't care about the thread
-        // work-item distribution properties in this path, which
-        // is okay due to the limited number of shaders, know since
-        // they are all getting linked together.)
+        char* sources[] = { nullptr, nullptr, nullptr, nullptr, nullptr };
 
-        char* sources[] = { (char*)config.source.c_str(), nullptr, nullptr, nullptr, nullptr };
-
-        glslang::TWorkItem* workItem;
-        while (workList.remove(workItem)) {
-            ShaderCompUnit compUnit(
-                FindLanguage(workItem->name, true),
-                workItem->name,
-                sources
-            );
-
-            if (!compUnit.text) {
-                return;
+        for (int i = 0; i < config.stageCount; i++)
+        {
+            sources[i] = (char*)config.source[i].c_str();
+            
+            const char* to;
+            EShLanguage lang = EShLangCount;
+            
+            switch(config.stage[i])
+            {
+                case StageVertex:
+                    to = "vert";
+                    lang = EShLangVertex;
+                    break;
+                case StageTessControl:
+                    to = "tesc";
+                    lang = EShLangTessControl;
+                    break;
+                case StageTessEvaluation:
+                    to = "tese";
+                    lang = EShLangTessEvaluation;
+                    break;
+                case StageGeometry:
+                    to = "geom";
+                    lang = EShLangGeometry;
+                    break;
+                case StageFragment:
+                    to = "frag";
+                    lang = EShLangFragment;
+                    break;
+                case StageCompute:
+                    to = "comp";
+                    lang = EShLangCompute;
+                    break;
+                default:
+                    break;
             }
-
+            
+            std::string name = (config.sourceName[i].length() > 0) ? config.sourceName[i] : std::string("source.") + to;
+                        
+            ShaderCompUnit compUnit(lang, name, sources+i);
             compUnits.push_back(compUnit);
         }
-
+    
         result.success = true;
         
-        // Actual call to programmatic processing of compile and link,
-        // in a loop for testing memory and performance.  This part contains
-        // all the perf/memory that a programmatic consumer will care about.
-        for (int i = 0; i < 1; ++i)
-        {
-            for (int j = 0; j < 1; ++j)
-            {
-                CompileAndLinkShaderUnits(config,
-                                          result,
-                                          compUnits,
-                                          target,
-                                          sourcefilename,
-                                          filename, tempdir,
-                                          includer,
-                                          defines);
-            }
-        }
+        CompileAndLinkShaderUnits(config,
+                                  result,
+                                  compUnits,
+                                  target,
+                                  config.sourceName[0].c_str(),
+                                  config.sourceName[0].c_str(),
+                                  includer,
+                                  defines);
+
     }
 
     void Compile(const Config& config, Result& result)
@@ -640,53 +560,7 @@ namespace ShaderCross
         {
             includer = new NullIncluder();
         }
-        
-        glslang::TWorklist Worklist;
-
-        // array of unique places to leave the shader names and infologs for the asynchronous compiles
-        glslang::TWorkItem** Work = 0;
-        int NumWorkItems = 0;
-
-        NumWorkItems = 1;
-        Work = new glslang::TWorkItem * [NumWorkItems];
-        Work[0] = 0;
-
-        std::string to;
-        switch(config.stage)
-        {
-            case StageVertex:
-                to = "vert";
-                break;
-            case StageTessControl:
-                to = "tesc";
-                break;
-            case StageTessEvaluation:
-                to = "tese";
-                break;
-            case StageGeometry:
-                to = "geom";
-                break;
-            case StageFragment:
-                to = "frag";
-                break;
-            case StageCompute:
-                to = "comp";
-                break;
-        }
-        
-        if (config.sourceName.length() > 0)
-        {
-            std::string name(config.sourceName);
-            Work[0] = new glslang::TWorkItem(name);
-            Worklist.add(Work[0]);
-        }
-        else
-        {
-            std::string name = std::string("source.") + to;
-            Work[0] = new glslang::TWorkItem(name);
-            Worklist.add(Work[0]);
-        }
-
+                    
         glslang::InitializeProcess();
 
         int version = -1;
@@ -727,11 +601,7 @@ namespace ShaderCross
         
         CompileAndLinkShaderFiles(config,
                                   result,
-                                  Worklist,
                                   target,
-                                  config.sourceName.c_str(),
-                                  to.c_str(),
-                                  nullptr,
                                   *includer,
                                   defines.c_str());
 

@@ -35,7 +35,8 @@ namespace ShaderCross
         StageTessEvaluation,
         StageGeometry,
         StageFragment,
-        StageCompute
+        StageCompute,
+        StageCount
     };
 
     enum TargetSystem {
@@ -91,9 +92,10 @@ namespace ShaderCross
     struct Config
     {
         Target target;
-        ShaderStage stage;
-        std::string source;
-        std::string sourceName;
+        uint8_t stageCount;
+        ShaderStage stage[2];
+        std::string source[2];
+        std::string sourceName[2];
         std::string defines;
         std::string includePath;
         IncludeCallback* includeCallback;
@@ -102,9 +104,10 @@ namespace ShaderCross
     struct Result
     {
         bool success; /* success/failure result of compilation */
-        std::string output; /* cross-compiled source code */
+        uint8_t resultCount; /* the number of build results */
+        std::string output[2]; /* cross-compiled source code */
         std::string errors; /* compiler and linker errors */
-        std::string json; /* reflection data */
+        std::string json[2]; /* reflection data */
     };
 
     void Compile(const Config& config, Result& result);
