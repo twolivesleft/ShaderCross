@@ -1,6 +1,6 @@
 [submodule "ShaderCross/Libraries/SPIRV-Cross"]
 	path = ShaderCross/Libraries/SPIRV-Cross
-	url = https://github.com/JohnTM/SPIRV-Cross.git
+	url = https://github.com/twolivesleft/SPIRV-Cross.git
 [submodule "ShaderCross/Libraries/glslang"]
 	path = ShaderCross/Libraries/glslang
-	url = https://github.com/JohnTM/glslang.git
+	url = https://github.com/twolivesleft/glslang.git
