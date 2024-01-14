@@ -152,98 +152,98 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 4F36235942AA40B28FDD0825;
+			remoteGlobalIDString = 7B7C7A8185524B21878B1EEF;
 			remoteInfo = HLSL;
 		};
 		3645F6EB249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 8C5A43BBB4BB4787A0CDD456;
+			remoteGlobalIDString = 64240CB3A417426A98BB5FBD;
 			remoteInfo = OGLCompiler;
 		};
 		3645F6ED249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = F20CA48FB14A420A808E3798;
+			remoteGlobalIDString = 9E205D830AD946BA9BD3A5F2;
 			remoteInfo = OSDependent;
 		};
 		3645F6EF249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 2F23078C02C7456EA41958C0;
+			remoteGlobalIDString = 39316BB95FA540439CA8B1AE;
 			remoteInfo = SPIRV;
 		};
 		3645F6F1249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 112465184E364D188960782B;
+			remoteGlobalIDString = 2B59A49732404D10941BC123;
 			remoteInfo = SPVRemapper;
 		};
 		3645F6F3249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F582249B3B5900FDF25F /* glslang.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 4E5FDAA37CDB42FA84966A23;
+			remoteGlobalIDString = 9A322F4489CA47B2A6849417;
 			remoteInfo = glslang;
 		};
 		3645F6F7249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = EC010139926A4F7695C6E731;
+			remoteGlobalIDString = 508959D5A2BF43BAA48B6E78;
 			remoteInfo = "spirv-cross-c";
 		};
 		3645F6F9249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 0077993704654C9390131206;
+			remoteGlobalIDString = A2568CA6BCFE4BC78BE9D957;
 			remoteInfo = "spirv-cross-core";
 		};
 		3645F6FB249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = AEE3FD915AA0410F84CCE882;
+			remoteGlobalIDString = 606299DEE69F43A08FFCDA82;
 			remoteInfo = "spirv-cross-cpp";
 		};
 		3645F6FD249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 913CCBB8A57E4551B158B918;
+			remoteGlobalIDString = 62EA0255853B4912A0DF56A0;
 			remoteInfo = "spirv-cross-glsl";
 		};
 		3645F6FF249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 6B52030263BB4838A04427D4;
+			remoteGlobalIDString = 148353CE5A5E466DA1B3B625;
 			remoteInfo = "spirv-cross-hlsl";
 		};
 		3645F701249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = B5F93E381CFF4F6EB828E81C;
+			remoteGlobalIDString = BB2F26096A544CC2837611BB;
 			remoteInfo = "spirv-cross-msl";
 		};
 		3645F703249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = DBF118FE434D440F8AC31A16;
+			remoteGlobalIDString = 21D7933D1B194387804E8821;
 			remoteInfo = "spirv-cross-reflect";
 		};
 		3645F705249E5F1400FDF25F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3645F5A3249B3B5900FDF25F /* SPIRV-Cross.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 80A50C99BF06451387846030;
+			remoteGlobalIDString = 2FAF8E645796415BB52189E8;
 			remoteInfo = "spirv-cross-util";
 		};
 		369193A32494C42100F9F0F4 /* PBXContainerItemProxy */ = {
@@ -599,8 +599,7 @@
 		};
 		3645F64B249DBD0000FDF25F /* spirv-cross */ = {
 			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.executable";
-			name = "spirv-cross";
+			fileType = wrapper.application;
 			path = "spirv-cross.app";
 			remoteRef = 3645F64A249DBD0000FDF25F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -936,6 +935,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -959,6 +959,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
