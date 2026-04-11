@@ -16,6 +16,12 @@
 #include <glslang/glslang/Include/ShHandle.h>
 #include <glslang/glslang/Include/revision.h>
 #include <glslang/glslang/Public/ShaderLang.h>
+// Include SPIRV-Cross before glslang/SPIRV/doc.h: both spirv.hpp and spirv.hpp11 use
+// the same include guard (spirv_HPP). We need the spirv-cross enum-based API to win.
+#include <SPIRV-Cross/spirv_parser.hpp>
+#include <SPIRV-Cross/spirv_reflect.hpp>
+#include <SPIRV-Cross/spirv_common.hpp>
+
 #include <glslang/SPIRV/GlslangToSpv.h>
 
 #include <glslang/SPIRV/GlslangToSpv.h>
@@ -23,10 +29,6 @@
 #include <glslang/SPIRV/doc.h>
 #include <glslang/SPIRV/disassemble.h>
 #include <glslang/OSDependent/osinclude.h>
-
-#include <SPIRV-Cross/spirv_parser.hpp>
-#include <SPIRV-Cross/spirv_reflect.hpp>
-#include <SPIRV-Cross/spirv_common.hpp>
 
 #include <cstring>
 #include <cstdlib>
