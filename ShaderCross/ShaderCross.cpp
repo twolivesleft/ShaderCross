@@ -351,22 +351,43 @@ namespace ShaderCross
         bool compileFailed = false;
 
         glslang::TProgram& program = *new glslang::TProgram;
-        for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it) {
+        // Build per-stage preambles (must outlive parse calls)
+        std::vector<std::string> preambles;
+        for (const auto& cu : compUnits) {
+            std::string p = defines;
+            if (cu.stage == EShLangVertex)
+                p += "#define VERTEX_SHADER 1\n";
+            else if (cu.stage == EShLangFragment)
+                p += "#define FRAGMENT_SHADER 1\n";
+            preambles.push_back(p);
+        }
+
+        int unitIdx = 0;
+        for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++unitIdx) {
             const auto& compUnit = *it;
             glslang::TShader* shader = new glslang::TShader(compUnit.stage);
             shader->setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
-            shader->setPreamble(defines);
+            shader->setPreamble(preambles[unitIdx].c_str());
             shader->setAutoMapBindings(true);
 
             shaders.push_back(shader);
 
-            const int defaultVersion = 100; // Options & EOptionDefaultDesktop ? 110 : 100;
+            // SPIR-V requires modern GLSL; default to 430 (desktop profile) to support
+            // layout qualifiers, in/out varyings, etc. Non-SPIR-V targets keep ESSL 100.
+            const int defaultVersion = (target.lang == SpirV) ? 430 : 100;
 
             shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
+
+            // For SPIR-V: target Vulkan so glslang uses OriginUpperLeft for fragment shaders
+            if (target.lang == SpirV)
+            {
+                shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+            }
             
             static TBuiltInResource defaultBuiltInResources = InitResources();
             
-            if (!shader->parse(&defaultBuiltInResources, defaultVersion, EEsProfile, false, false, messages, includer))
+            EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
+            if (!shader->parse(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, includer))
             {
                 compileFailed = true;
                 result.errors += shader->getInfoLog();
@@ -416,7 +437,15 @@ namespace ShaderCross
                     switch (target.lang)
                     {
                     case SpirV:
-                        translator = new SpirVTranslator(spirv, shaderStage);
+                        // Bypass SpirVTranslator — it produces invalid SPIR-V
+                        // (misplaced OpSource, duplicate Location decorations).
+                        // Use raw glslang SPIR-V directly; shaders must use explicit UBO blocks.
+                        {
+                            size_t byteSize = spirv.size() * sizeof(unsigned int);
+                            result.output[outputIndex] = std::string(reinterpret_cast<const char*>(spirv.data()), byteSize);
+                            result.success = true;
+                            result.resultCount = 1;
+                        }
                         break;
                     case GLSL:
                         translator = new GlslTranslator2(spirv, shaderStage, false);
@@ -437,18 +466,21 @@ namespace ShaderCross
                         break;
                     }
 
-                    try
+                    if (translator)
                     {
-                        translator->outputCode(target, sourcefilename, filename, s_compilerOutputBuffer, attributes);
-                        result.output[outputIndex] = s_compilerOutputBuffer;
-                        result.success = true;
-                        result.resultCount = 1;
-                    }
-                    catch (spirv_cross::CompilerError& error) {
-                        printf("Error compiling to %s: %s\n", target.string().c_str(), error.what());
-                        compileFailed = true;
-                        result.success = false;
-                        result.errors += error.what();
+                        try
+                        {
+                            translator->outputCode(target, sourcefilename, filename, s_compilerOutputBuffer, attributes);
+                            result.output[outputIndex] = s_compilerOutputBuffer;
+                            result.success = true;
+                            result.resultCount = 1;
+                        }
+                        catch (spirv_cross::CompilerError& error) {
+                            printf("Error compiling to %s: %s\n", target.string().c_str(), error.what());
+                            compileFailed = true;
+                            result.success = false;
+                            result.errors += error.what();
+                        }
                     }
                     
                     {
@@ -574,6 +606,7 @@ namespace ShaderCross
         {
             case SpirV:
                 target.version = version > 0 ? version : 1;
+                defines += "#extension GL_GOOGLE_include_directive : enable\n";
                 defines += "#define SPIRV " + std::to_string(config.target.version) + "\n";
                 break;
             case GLSL:

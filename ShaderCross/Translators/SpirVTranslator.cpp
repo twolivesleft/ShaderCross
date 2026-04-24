@@ -623,7 +623,7 @@ void SpirVTranslator::outputCode(const Target& target, const char* sourcefilenam
 			}
 		}
 		else if (inst.opcode == OpStore) {
-			if (stage == StageVertex) {
+			if (stage == StageVertex && false) { // DISABLED: bgfx handles NDC Z adjustment
 				//gl_Position.z = (gl_Position.z + gl_Position.w) * 0.5;
 				unsigned to = inst.operands[0];
 				unsigned from = inst.operands[1];
