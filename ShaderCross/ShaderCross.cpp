@@ -1,3 +1,4 @@
+#include <mutex>
 //
 //  ShaderCross.cpp
 //  ShaderCross
@@ -312,7 +313,7 @@ namespace ShaderCross
 
     };
 
-    static char s_compilerOutputBuffer[1024*1024];
+
 
     ShaderStage shLanguageToShaderStage(EShLanguage lang)
     {
@@ -338,6 +339,7 @@ namespace ShaderCross
                                    glslang::TShader::Includer& includer,
                                    const char* defines)
     {
+        std::vector<char> compilerOutputBuffer(1024*1024);
         // keep track of what to free
         std::list<glslang::TShader*> shaders;
 
@@ -470,8 +472,8 @@ namespace ShaderCross
                     {
                         try
                         {
-                            translator->outputCode(target, sourcefilename, filename, s_compilerOutputBuffer, attributes);
-                            result.output[outputIndex] = s_compilerOutputBuffer;
+                            translator->outputCode(target, sourcefilename, filename, compilerOutputBuffer.data(), attributes);
+                            result.output[outputIndex] = compilerOutputBuffer.data();
                             result.success = true;
                             result.resultCount = 1;
                         }
@@ -595,7 +597,8 @@ namespace ShaderCross
             includer = new NullIncluder();
         }
                     
-        glslang::InitializeProcess();
+        static std::once_flag initializeProcess;
+        std::call_once(initializeProcess, [] { glslang::InitializeProcess(); });
 
         int version = -1;
 
