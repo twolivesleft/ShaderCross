@@ -1,4 +1,5 @@
 #include <mutex>
+#include <sstream>
 //
 //  ShaderCross.cpp
 //  ShaderCross
@@ -11,6 +12,10 @@
 // Originally based on the Krafix shader compiler (https://github.com/Kode/krafix)
 
 #include "ShaderCross.hpp"
+// Builds that compile SPIR-V for bgfx's Vulkan renderer also build VulkanGlsl.cpp and link SPIRV-Tools' optimizer
+#ifdef SHADERCROSS_BGFX_VULKAN
+#include "VulkanGlsl.hpp"
+#endif
 
 #include <glslang/StandAlone/ResourceLimits.h>
 #include <glslang/StandAlone/Worklist.h>
@@ -364,6 +369,48 @@ namespace ShaderCross
             preambles.push_back(p);
         }
 
+        static TBuiltInResource defaultBuiltInResources = InitResources();
+
+        // For Vulkan, preprocess every stage (includes, defines) and adapt them together, as the
+        // stages of a program share their uniform block
+        std::vector<std::string> adaptedSources;
+#ifdef SHADERCROSS_BGFX_VULKAN
+        if (target.lang == SpirV)
+        {
+            std::vector<std::string> flattenedStages;
+            int preprocessIdx = 0;
+            for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++preprocessIdx)
+            {
+                glslang::TShader preprocessor(it->stage);
+                preprocessor.setStringsWithLengthsAndNames(it->text, NULL, it->fileNameList, 1);
+                preprocessor.setPreamble(preambles[preprocessIdx].c_str());
+                preprocessor.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
+                preprocessor.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+                std::string flattened;
+                if (!preprocessor.preprocess(&defaultBuiltInResources, 430, ECoreProfile, false, false, messages, &flattened, includer))
+                {
+                    result.success = false;
+                    result.errors += preprocessor.getInfoLog();
+                    return;
+                }
+
+                // The preamble's lines come out ahead of #version, which must be first
+                std::string body;
+                std::istringstream lines(flattened);
+                for (std::string line; std::getline(lines, line); )
+                {
+                    if (line.rfind("#version", 0) == 0 || line.rfind("#extension GL_GOOGLE_include_directive", 0) == 0) continue;
+                    body += line + "\n";
+                }
+                flattenedStages.push_back(body);
+            }
+            for (const std::string& stage : adaptGlslForVulkan(flattenedStages))
+            {
+                adaptedSources.push_back("#version 430\n#extension GL_GOOGLE_cpp_style_line_directive : enable\n" + stage);
+            }
+        }
+#endif
+
         int unitIdx = 0;
         for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++unitIdx) {
             const auto& compUnit = *it;
@@ -371,6 +418,14 @@ namespace ShaderCross
             shader->setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
             shader->setPreamble(preambles[unitIdx].c_str());
             shader->setAutoMapBindings(true);
+
+            if (!adaptedSources.empty())
+            {
+                const char* adapted = adaptedSources[unitIdx].c_str();
+                shader->setStrings(&adapted, 1);
+                shader->setPreamble("");
+                shader->setAutoMapLocations(true);
+            }
 
             shaders.push_back(shader);
 
@@ -385,8 +440,6 @@ namespace ShaderCross
             {
                 shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
             }
-            
-            static TBuiltInResource defaultBuiltInResources = InitResources();
             
             EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
             if (!shader->parse(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, includer))
@@ -431,6 +484,20 @@ namespace ShaderCross
                     std::string warningsErrors;
                     spv::SpvBuildLogger logger;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger);
+
+#ifdef SHADERCROSS_BGFX_VULKAN
+                    if (target.lang == SpirV)
+                    {
+                        std::string bindingError;
+                        if (!assignBgfxBindings(spirv, stage == EShLangVertex, &bindingError))
+                        {
+                            compileFailed = true;
+                            result.success = false;
+                            result.errors += bindingError + "\n";
+                            continue;
+                        }
+                    }
+#endif
 
                     Translator* translator = NULL;
                     ShaderStage shaderStage = shLanguageToShaderStage((EShLanguage)stage);
@@ -611,6 +678,7 @@ namespace ShaderCross
                 target.version = version > 0 ? version : 1;
                 defines += "#extension GL_GOOGLE_include_directive : enable\n";
                 defines += "#define SPIRV " + std::to_string(config.target.version) + "\n";
+                defines += "#define TARGET_LANGUAGE_SPIRV 1\n";
                 break;
             case GLSL:
                 defines += "#define GLSL " + std::to_string(target.version) + "\n";
