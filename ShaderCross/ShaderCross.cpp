@@ -1,5 +1,4 @@
 #include <mutex>
-#include <sstream>
 //
 //  ShaderCross.cpp
 //  ShaderCross
@@ -371,77 +370,46 @@ namespace ShaderCross
 
         static TBuiltInResource defaultBuiltInResources = InitResources();
 
-        // For Vulkan, preprocess every stage (includes, defines) and adapt them together, as the
-        // stages of a program share their uniform block
-        std::vector<std::string> adaptedSources;
-#ifdef SHADERCROSS_BGFX_VULKAN
-        if (target.lang == SpirV)
-        {
-            std::vector<std::string> flattenedStages;
-            int preprocessIdx = 0;
-            for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++preprocessIdx)
-            {
-                glslang::TShader preprocessor(it->stage);
-                preprocessor.setStringsWithLengthsAndNames(it->text, NULL, it->fileNameList, 1);
-                preprocessor.setPreamble(preambles[preprocessIdx].c_str());
-                preprocessor.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
-                preprocessor.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
-                std::string flattened;
-                if (!preprocessor.preprocess(&defaultBuiltInResources, 430, ECoreProfile, false, false, messages, &flattened, includer))
-                {
-                    result.success = false;
-                    result.errors += preprocessor.getInfoLog();
-                    return;
-                }
-
-                // The preamble's lines come out ahead of #version, which must be first
-                std::string body;
-                std::istringstream lines(flattened);
-                for (std::string line; std::getline(lines, line); )
-                {
-                    if (line.rfind("#version", 0) == 0 || line.rfind("#extension GL_GOOGLE_include_directive", 0) == 0) continue;
-                    body += line + "\n";
-                }
-                flattenedStages.push_back(body);
-            }
-            for (const std::string& stage : adaptGlslForVulkan(flattenedStages))
-            {
-                adaptedSources.push_back("#version 430\n#extension GL_GOOGLE_cpp_style_line_directive : enable\n" + stage);
-            }
-        }
-#endif
+        // SPIR-V requires modern GLSL; default to 430 (desktop profile) to support
+        // layout qualifiers, in/out varyings, etc. Non-SPIR-V targets keep ESSL 100.
+        const int defaultVersion = (target.lang == SpirV) ? 430 : 100;
+        EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
 
         int unitIdx = 0;
         for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++unitIdx) {
             const auto& compUnit = *it;
-            glslang::TShader* shader = new glslang::TShader(compUnit.stage);
-            shader->setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
-            shader->setPreamble(preambles[unitIdx].c_str());
-            shader->setAutoMapBindings(true);
+            auto configure = [&](glslang::TShader& shader) {
+                shader.setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
+                shader.setPreamble(preambles[unitIdx].c_str());
+                shader.setAutoMapBindings(true);
+                shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
-            if (!adaptedSources.empty())
-            {
-                const char* adapted = adaptedSources[unitIdx].c_str();
-                shader->setStrings(&adapted, 1);
-                shader->setPreamble("");
-                shader->setAutoMapLocations(true);
-            }
+                // For SPIR-V: target Vulkan so glslang uses OriginUpperLeft for fragment shaders
+                if (target.lang == SpirV)
+                {
+                    shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+#ifdef SHADERCROSS_BGFX_VULKAN
+                    useBgfxUniformBlock(shader, compUnit.stage);
+                    shader.setAutoMapLocations(true);
+#endif
+                }
+            };
 
-            shaders.push_back(shader);
-
-            // SPIR-V requires modern GLSL; default to 430 (desktop profile) to support
-            // layout qualifiers, in/out varyings, etc. Non-SPIR-V targets keep ESSL 100.
-            const int defaultVersion = (target.lang == SpirV) ? 430 : 100;
-
-            shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
-
-            // For SPIR-V: target Vulkan so glslang uses OriginUpperLeft for fragment shaders
+#ifdef SHADERCROSS_BGFX_VULKAN
             if (target.lang == SpirV)
             {
-                shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+                glslang::TShader preprocessor(compUnit.stage);
+                configure(preprocessor);
+                std::string flattened;
+                if (preprocessor.preprocess(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, &flattened, includer))
+                    preambles[unitIdx] += undeclaredBuiltins(flattened);
             }
-            
-            EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
+#endif
+
+            glslang::TShader* shader = new glslang::TShader(compUnit.stage);
+            configure(*shader);
+            shaders.push_back(shader);
+
             if (!shader->parse(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, includer))
             {
                 compileFailed = true;
