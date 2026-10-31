@@ -480,7 +480,7 @@ namespace ShaderCross
                         {
                             size_t byteSize = spirv.size() * sizeof(unsigned int);
                             result.output[outputIndex] = std::string(reinterpret_cast<const char*>(spirv.data()), byteSize);
-                            result.success = true;
+                            result.success = !compileFailed;
                             result.resultCount = 1;
                         }
                         break;
