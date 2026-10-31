@@ -100,7 +100,7 @@ namespace ShaderCross
         enum : uint32_t
         {
             OpName = 5, OpTypeImage = 25, OpTypeSampler = 26, OpTypeSampledImage = 27, OpTypeArray = 28,
-            OpTypePointer = 32, OpVariable = 59, OpDecorate = 71, DecorationBinding = 33,
+            OpTypePointer = 32, OpVariable = 59, OpDecorate = 71, DecorationBlock = 2, DecorationBinding = 33,
             StorageClassUniform = 2,
         };
 
@@ -147,21 +147,39 @@ namespace ShaderCross
         std::map<uint32_t, std::string> names;
         std::map<uint32_t, size_t> bindingWord;       // variable id -> index of its Binding operand
         std::set<uint32_t> uniformBlocks;
+        std::map<uint32_t, uint32_t> pointerOf;       // uniform variable id -> its pointer type id
+        std::map<uint32_t, uint32_t> pointee;         // pointer type id -> pointee type id
+        std::set<uint32_t> blockTypes;                // struct types decorated Block, not BufferBlock
         forEachInstruction([&](size_t i, uint32_t op, uint32_t)
         {
             switch (op)
             {
                 case OpTypeImage: case OpTypeSampler: typeKind[spirv[i + 1]] = op; break;
                 case OpTypeArray: if (typeKind.count(spirv[i + 2])) typeKind[spirv[i + 1]] = typeKind[spirv[i + 2]]; break;
-                case OpTypePointer: if (typeKind.count(spirv[i + 3])) pointerKind[spirv[i + 1]] = typeKind[spirv[i + 3]]; break;
+                case OpTypePointer:
+                    pointee[spirv[i + 1]] = spirv[i + 3];
+                    if (typeKind.count(spirv[i + 3])) pointerKind[spirv[i + 1]] = typeKind[spirv[i + 3]];
+                    break;
                 case OpVariable:
                     if (pointerKind.count(spirv[i + 1])) variableKind[spirv[i + 2]] = pointerKind[spirv[i + 1]];
-                    else if (spirv[i + 3] == StorageClassUniform) uniformBlocks.insert(spirv[i + 2]);
+                    else if (spirv[i + 3] == StorageClassUniform) { uniformBlocks.insert(spirv[i + 2]); pointerOf[spirv[i + 2]] = spirv[i + 1]; }
                     break;
                 case OpName: names[spirv[i + 1]] = reinterpret_cast<const char*>(&spirv[i + 2]); break;
-                case OpDecorate: if (spirv[i + 2] == DecorationBinding) bindingWord[spirv[i + 1]] = i + 3; break;
+                case OpDecorate:
+                    if (spirv[i + 2] == DecorationBinding) bindingWord[spirv[i + 1]] = i + 3;
+                    else if (spirv[i + 2] == DecorationBlock) blockTypes.insert(spirv[i + 1]);
+                    break;
             }
         });
+
+        // bgfx's Vulkan renderer reads a single uniform block per stage
+        size_t blocks = 0;
+        for (const auto& [id, type] : pointerOf) blocks += blockTypes.count(pointee[type]);
+        if (blocks > 1)
+        {
+            if (error) *error = "A shader stage can have only one uniform block: put loose uniforms in it, or declare none";
+            return false;
+        }
 
         for (uint32_t id : uniformBlocks)
         {
