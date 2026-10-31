@@ -11,6 +11,10 @@
 // Originally based on the Krafix shader compiler (https://github.com/Kode/krafix)
 
 #include "ShaderCross.hpp"
+// Builds that compile SPIR-V for bgfx's Vulkan renderer also build VulkanGlsl.cpp and link SPIRV-Tools' optimizer
+#ifdef SHADERCROSS_BGFX_VULKAN
+#include "VulkanGlsl.hpp"
+#endif
 
 #include <glslang/StandAlone/ResourceLimits.h>
 #include <glslang/StandAlone/Worklist.h>
@@ -364,31 +368,48 @@ namespace ShaderCross
             preambles.push_back(p);
         }
 
+        static TBuiltInResource defaultBuiltInResources = InitResources();
+
+        // SPIR-V requires modern GLSL; default to 430 (desktop profile) to support
+        // layout qualifiers, in/out varyings, etc. Non-SPIR-V targets keep ESSL 100.
+        const int defaultVersion = (target.lang == SpirV) ? 430 : 100;
+        EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
+
         int unitIdx = 0;
         for (auto it = compUnits.cbegin(); it != compUnits.cend(); ++it, ++unitIdx) {
             const auto& compUnit = *it;
-            glslang::TShader* shader = new glslang::TShader(compUnit.stage);
-            shader->setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
-            shader->setPreamble(preambles[unitIdx].c_str());
-            shader->setAutoMapBindings(true);
+            auto configure = [&](glslang::TShader& shader) {
+                shader.setStringsWithLengthsAndNames(compUnit.text, NULL, compUnit.fileNameList, 1);
+                shader.setPreamble(preambles[unitIdx].c_str());
+                shader.setAutoMapBindings(true);
+                shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
-            shaders.push_back(shader);
+                // For SPIR-V: target Vulkan so glslang uses OriginUpperLeft for fragment shaders
+                if (target.lang == SpirV)
+                {
+                    shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+#ifdef SHADERCROSS_BGFX_VULKAN
+                    useBgfxUniformBlock(shader, compUnit.stage);
+                    shader.setAutoMapLocations(true);
+#endif
+                }
+            };
 
-            // SPIR-V requires modern GLSL; default to 430 (desktop profile) to support
-            // layout qualifiers, in/out varyings, etc. Non-SPIR-V targets keep ESSL 100.
-            const int defaultVersion = (target.lang == SpirV) ? 430 : 100;
-
-            shader->setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
-
-            // For SPIR-V: target Vulkan so glslang uses OriginUpperLeft for fragment shaders
+#ifdef SHADERCROSS_BGFX_VULKAN
             if (target.lang == SpirV)
             {
-                shader->setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+                glslang::TShader preprocessor(compUnit.stage);
+                configure(preprocessor);
+                std::string flattened;
+                if (preprocessor.preprocess(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, &flattened, includer))
+                    preambles[unitIdx] += undeclaredBuiltins(flattened);
             }
-            
-            static TBuiltInResource defaultBuiltInResources = InitResources();
-            
-            EProfile profile = (target.lang == SpirV) ? ECoreProfile : EEsProfile;
+#endif
+
+            glslang::TShader* shader = new glslang::TShader(compUnit.stage);
+            configure(*shader);
+            shaders.push_back(shader);
+
             if (!shader->parse(&defaultBuiltInResources, defaultVersion, profile, false, false, messages, includer))
             {
                 compileFailed = true;
@@ -432,6 +453,20 @@ namespace ShaderCross
                     spv::SpvBuildLogger logger;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger);
 
+#ifdef SHADERCROSS_BGFX_VULKAN
+                    if (target.lang == SpirV)
+                    {
+                        std::string bindingError;
+                        if (!assignBgfxBindings(spirv, stage == EShLangVertex, &bindingError))
+                        {
+                            compileFailed = true;
+                            result.success = false;
+                            result.errors += bindingError + "\n";
+                            continue;
+                        }
+                    }
+#endif
+
                     Translator* translator = NULL;
                     ShaderStage shaderStage = shLanguageToShaderStage((EShLanguage)stage);
                     std::map<std::string, int> attributes;
@@ -445,7 +480,7 @@ namespace ShaderCross
                         {
                             size_t byteSize = spirv.size() * sizeof(unsigned int);
                             result.output[outputIndex] = std::string(reinterpret_cast<const char*>(spirv.data()), byteSize);
-                            result.success = true;
+                            result.success = !compileFailed;
                             result.resultCount = 1;
                         }
                         break;
@@ -611,6 +646,7 @@ namespace ShaderCross
                 target.version = version > 0 ? version : 1;
                 defines += "#extension GL_GOOGLE_include_directive : enable\n";
                 defines += "#define SPIRV " + std::to_string(config.target.version) + "\n";
+                defines += "#define TARGET_LANGUAGE_SPIRV 1\n";
                 break;
             case GLSL:
                 defines += "#define GLSL " + std::to_string(target.version) + "\n";
