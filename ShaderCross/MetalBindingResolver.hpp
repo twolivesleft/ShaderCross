@@ -1,6 +1,9 @@
 #pragma once
 
+#include <glslang/glslang/MachineIndependent/localintermediate.h>
 #include <glslang/glslang/MachineIndependent/iomapper.h>
+#include <string>
+#include <unordered_map>
 
 namespace ShaderCross {
 
@@ -17,14 +20,15 @@ public:
     void reserveExplicitBindings(glslang::TIntermediate& stage) {
         struct Collector : glslang::TIntermTraverser {
             MetalBindingResolver& resolver;
-            explicit Collector(MetalBindingResolver& resolver) : resolver(resolver) {}
+            EShLanguage stage;
+            Collector(MetalBindingResolver& resolver, EShLanguage stage) : resolver(resolver), stage(stage) {}
             void visitSymbol(glslang::TIntermSymbol* symbol) override {
                 if (!symbol->getQualifier().isUniformOrBuffer() || !symbol->getQualifier().hasBinding()) return;
                 glslang::TVarEntryInfo entry{};
                 entry.symbol = symbol;
-                resolver.resolveBinding(EShLangCount, entry);
+                resolver.resolveBinding(stage, entry);
             }
-        } collector(*this);
+        } collector(*this, stage.getStage());
         if (stage.getTreeRoot()) stage.getTreeRoot()->traverse(&collector);
     }
 
@@ -37,7 +41,7 @@ public:
         return glslang::EResCount;
     }
 
-    int resolveBinding(EShLanguage, glslang::TVarEntryInfo& entry) override {
+    int resolveBinding(EShLanguage stage, glslang::TVarEntryInfo& entry) override {
         const auto& type = entry.symbol->getType();
         const auto resource = getResourceType(type);
         entry.newBinding = -1;
@@ -54,12 +58,23 @@ public:
         // Metal arrays occupy consecutive argument indices, including when the
         // input SPIR-V was generated without OpenGL client semantics.
         const int count = type.isSizedArray() ? type.getCumulativeArraySize() : 1;
+#ifdef SHADERCROSS_BGFX_VULKAN
+        // bgfx's glslang groups slots by resource and set, and accepts a stage
+        // for binding shifts. Use one resource group for our two Metal tables.
+        const int base = getBaseBinding(stage, resource, set);
+        if (type.getQualifier().hasBinding()) {
+            entry.newBinding = reserveSlot(0, slotsKey, base + type.getQualifier().layoutBinding, count);
+        } else if (entry.live && doAutoBindingMapping()) {
+            entry.newBinding = getFreeSlot(0, slotsKey, base, count);
+        }
+#else
         const int base = getBaseBinding(resource, set);
         if (type.getQualifier().hasBinding()) {
             entry.newBinding = reserveSlot(slotsKey, base + type.getQualifier().layoutBinding, count);
         } else if (entry.live && doAutoBindingMapping()) {
             entry.newBinding = getFreeSlot(slotsKey, base, count);
         }
+#endif
         if (entry.newBinding >= 0) bindings[name] = entry.newBinding;
         return entry.newBinding;
     }
