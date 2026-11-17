@@ -27,5 +27,5 @@ namespace ShaderCross
     /// combined image samplers and places every texture at binding `2 + stage` with its sampler
     /// at `18 + stage`, keeping the names the shader declared. Texture bindings written by hand
     /// are left alone.
-    bool assignBgfxBindings(std::vector<uint32_t>& spirv, bool vertexStage, std::string* error = nullptr);
+    bool assignBgfxBindings(std::vector<uint32_t>& spirv, EShLanguage shaderStage, std::string* error = nullptr);
 }
