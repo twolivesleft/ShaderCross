@@ -457,7 +457,7 @@ namespace ShaderCross
                     if (target.lang == SpirV)
                     {
                         std::string bindingError;
-                        if (!assignBgfxBindings(spirv, stage == EShLangVertex, &bindingError))
+                        if (!assignBgfxBindings(spirv, static_cast<EShLanguage>(stage), &bindingError))
                         {
                             compileFailed = true;
                             result.success = false;

@@ -111,8 +111,10 @@ namespace ShaderCross
         }
     }
 
-    bool assignBgfxBindings(std::vector<uint32_t>& spirv, bool vertexStage, std::string* error)
+    bool assignBgfxBindings(std::vector<uint32_t>& spirv, EShLanguage shaderStage, std::string* error)
     {
+        const bool vertexStage = shaderStage == EShLangVertex;
+        const bool computeStage = shaderStage == EShLangCompute;
         auto forEachInstruction = [&](auto&& visit)
         {
             for (size_t i = 5; i < spirv.size(); )
@@ -183,7 +185,10 @@ namespace ShaderCross
 
         for (uint32_t id : uniformBlocks)
         {
-            if (bindingWord.count(id)) spirv[bindingWord[id]] = vertexStage ? kVertexUniformBinding : kFragmentUniformBinding;
+            // SPIR-V 1.0 also uses Uniform storage for BufferBlock SSBOs.
+            // Only actual uniform blocks belong at the stage's UBO binding.
+            if (blockTypes.count(pointee[pointerOf[id]]) && bindingWord.count(id))
+                spirv[bindingWord[id]] = shaderStage == EShLangFragment ? kFragmentUniformBinding : kVertexUniformBinding;
         }
 
         // Bindings written by hand keep their stage; the split pairs share the rest
@@ -206,14 +211,14 @@ namespace ShaderCross
         for (const auto& [name, ids] : pairs)
         {
             if (!ids.first || !ids.second || !bindingWord.count(ids.first)) continue;
-            uint32_t stage = kMaxTextureStages;
-            for (uint32_t i = 0; i < kMaxTextureStages; i++)
+            uint32_t stage = computeStage ? spirv[bindingWord[ids.first]] : kMaxTextureStages;
+            for (uint32_t i = 0; !computeStage && i < kMaxTextureStages; i++)
             {
                 // Vertex textures count down from the top so the two stages rarely share a slot
                 uint32_t candidate = vertexStage ? kMaxTextureStages - 1 - i : i;
                 if (usedStages.insert(candidate).second) { stage = candidate; break; }
             }
-            if (stage == kMaxTextureStages)
+            if (stage >= kMaxTextureStages)
             {
                 if (error) *error = "Too many textures for one shader stage";
                 return false;
