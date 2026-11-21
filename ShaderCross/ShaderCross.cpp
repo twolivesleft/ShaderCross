@@ -21,6 +21,7 @@
 #include <glslang/glslang/Include/ShHandle.h>
 #include <glslang/glslang/Include/revision.h>
 #include <glslang/glslang/Public/ShaderLang.h>
+#include "MetalBindingResolver.hpp"
 // Include SPIRV-Cross before glslang/SPIRV/doc.h: both spirv.hpp and spirv.hpp11 use
 // the same include guard (spirv_HPP). We need the spirv-cross enum-based API to win.
 #include <SPIRV-Cross/spirv_parser.hpp>
@@ -40,6 +41,7 @@
 #include <cctype>
 #include <cmath>
 #include <array>
+#include <memory>
 #include <sstream>
 #include <fstream>
 
@@ -430,7 +432,23 @@ namespace ShaderCross
             result.errors += program.getInfoLog();
         }
             
-        if (!program.mapIO())
+        // Other targets retain their existing descriptor allocation. Metal's
+        // texture argument indices must not count scalar/vector/matrix uniforms.
+        glslang::TIntermediate* firstStage = nullptr;
+        for (int stage = 0; stage < EShLangCount && !firstStage; ++stage)
+            firstStage = program.getIntermediate(static_cast<EShLanguage>(stage));
+        std::unique_ptr<MetalBindingResolver> metalBindings;
+        if (target.lang == Metal && firstStage)
+        {
+            metalBindings = std::make_unique<MetalBindingResolver>(*firstStage);
+            // Collect every stage before allocation so explicit fragment slots
+            // are reserved before implicit vertex textures. Shared resources use
+            // one slot: bgfx's texture table is shared across shader stages.
+            for (int stage = 0; stage < EShLangCount; ++stage)
+                if (auto intermediate = program.getIntermediate(static_cast<EShLanguage>(stage)))
+                    metalBindings->reserveExplicitBindings(*intermediate);
+        }
+        if (!program.mapIO(metalBindings.get()))
         {
             linkFailed = true;
         }
