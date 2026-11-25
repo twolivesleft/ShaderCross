@@ -36,8 +36,13 @@
 #include <glslang/SPIRV/disassemble.h>
 #include <glslang/OSDependent/osinclude.h>
 
+#include <algorithm>
 #include <cstring>
 #include <cstdlib>
+#include <climits>
+#include <cstdint>
+#include <string>
+#include <vector>
 #include <cctype>
 #include <cmath>
 #include <array>
@@ -54,6 +59,141 @@
 
 namespace ShaderCross
 {
+    namespace
+    {
+        // bgfx binds vertex inputs by name, in bgfx::Attrib order. Codea's POSITION, NORMAL,
+        // COLOR0, TEXCOORD0... location defines (common.glsl) use the same order.
+        const char* const kBgfxAttribNames[] =
+        {
+            "a_position", "a_normal", "a_tangent", "a_bitangent",
+            "a_color0", "a_color1", "a_color2", "a_color3",
+            "a_indices", "a_weight",
+            "a_texcoord0", "a_texcoord1", "a_texcoord2", "a_texcoord3",
+            "a_texcoord4", "a_texcoord5", "a_texcoord6", "a_texcoord7",
+            "a_texcoord8", "a_texcoord9", "a_texcoord10", "a_texcoord11",
+            "a_texcoord12", "a_texcoord13", "a_texcoord14", "a_texcoord15",
+        };
+
+        const size_t kBgfxAttribCount = sizeof(kBgfxAttribNames) / sizeof(kBgfxAttribNames[0]);
+        const int kInstanceData = -1, kUnknownInput = -2;
+
+        // The bgfx attribute an input's name selects, kInstanceData, or kUnknownInput
+        int bgfxAttribForName(const std::string& name)
+        {
+            if (name.compare(0, 6, "i_data") == 0) return kInstanceData;
+            for (size_t attrib = 0; attrib < kBgfxAttribCount; attrib++)
+                if (name == kBgfxAttribNames[attrib]) return (int)attrib;
+            return kUnknownInput;
+        }
+
+        void appendOpName(std::vector<unsigned int>& spirv, uint32_t target, const std::string& name)
+        {
+            constexpr uint32_t OpName = 5;
+            const uint32_t stringWords = (uint32_t)(name.size() + 4) / 4; // includes the terminator
+            const size_t at = spirv.size();
+            spirv.resize(at + 2 + stringWords, 0);
+            spirv[at] = ((2 + stringWords) << 16) | OpName;
+            spirv[at + 1] = target;
+            std::memcpy(&spirv[at + 2], name.data(), name.size());
+        }
+    }
+
+    /// Names each vertex input after the bgfx attribute its location selects, so
+    /// `layout(location = COLOR0) in vec4 a_color;` reads the mesh's colors. Inputs already
+    /// named for a bgfx attribute are left alone. Fails, with a message for the shader's
+    /// author, for an input bgfx could not bind; the renderer would reject it at draw time.
+    /// Uses id-indexed vectors rather than std::map: this file builds as C++14 while the engine
+    /// builds as C++20, and libc++'s map lookups differ between the two under the same symbols.
+    static bool assignVertexInputNames(std::vector<unsigned int>& spirv, std::string& error)
+    {
+        constexpr uint32_t OpName = 5, OpVariable = 59, OpDecorate = 71;
+        constexpr uint32_t DecorationBuiltIn = 11, DecorationLocation = 30, StorageClassInput = 1;
+        constexpr uint32_t kNoLocation = UINT32_MAX;
+
+        if (spirv.size() < 5) return true;
+        const uint32_t bound = spirv[3];
+        std::vector<std::string> names(bound);
+        std::vector<bool> named(bound, false), builtIn(bound, false);
+        std::vector<uint32_t> locations(bound, kNoLocation);
+        std::vector<uint32_t> inputs;
+        size_t firstDecoration = spirv.size();
+
+        auto valid = [&](uint32_t id) { return id < bound; };
+        for (size_t i = 5; i < spirv.size(); )
+        {
+            const uint32_t count = spirv[i] >> 16, op = spirv[i] & 0xFFFF;
+            if (count == 0 || i + count > spirv.size()) return true; // malformed; the translator reports it
+            if (op == OpName && count >= 3 && valid(spirv[i + 1]))
+            {
+                names[spirv[i + 1]] = reinterpret_cast<const char*>(&spirv[i + 2]);
+                named[spirv[i + 1]] = true;
+            }
+            else if (op == OpDecorate && count >= 3 && valid(spirv[i + 1]))
+            {
+                firstDecoration = std::min(firstDecoration, i);
+                if (spirv[i + 2] == DecorationLocation && count >= 4) locations[spirv[i + 1]] = spirv[i + 3];
+                else if (spirv[i + 2] == DecorationBuiltIn) builtIn[spirv[i + 1]] = true;
+            }
+            else if (op == OpVariable && count >= 4 && spirv[i + 3] == StorageClassInput && valid(spirv[i + 2]))
+            {
+                inputs.push_back(spirv[i + 2]);
+            }
+            i += count;
+        }
+
+        std::vector<std::string> renames(bound);
+        std::vector<std::string> claimedBy(kBgfxAttribCount); // the input reading each attribute
+        bool renamed = false;
+        for (uint32_t id : inputs)
+        {
+            if (builtIn[id]) continue;
+            const std::string& name = names[id];
+            int attrib = bgfxAttribForName(name);
+            if (attrib == kInstanceData) continue;
+            if (attrib == kUnknownInput)
+            {
+                if (locations[id] >= kBgfxAttribCount)
+                {
+                    error = "Vertex input '" + name + "' does not match a mesh attribute. Declare it with "
+                            "layout(location = POSITION, NORMAL, TANGENT, COLOR0 or TEXCOORD0...), or name it "
+                            "a_position, a_normal, a_tangent, a_color0 or a_texcoord0...";
+                    return false;
+                }
+                attrib = (int)locations[id];
+                renames[id] = kBgfxAttribNames[attrib];
+                renamed = true;
+            }
+            if (!claimedBy[attrib].empty())
+            {
+                error = "Vertex inputs '" + claimedBy[attrib] + "' and '" + name + "' both read the mesh attribute " +
+                        kBgfxAttribNames[attrib] + ". Give each input its own location.";
+                return false;
+            }
+            claimedBy[attrib] = name;
+        }
+        if (!renamed) return true;
+
+        std::vector<unsigned int> patched(spirv.begin(), spirv.begin() + 5);
+        patched.reserve(spirv.size() + inputs.size() * 6);
+        for (size_t i = 5; i < spirv.size(); )
+        {
+            const uint32_t count = spirv[i] >> 16;
+            if (i == firstDecoration)
+            {
+                // Inputs glslang left unnamed get a name ahead of the annotations
+                for (uint32_t id : inputs)
+                    if (!renames[id].empty() && !named[id]) appendOpName(patched, id, renames[id]);
+            }
+            if ((spirv[i] & 0xFFFF) == OpName && valid(spirv[i + 1]) && !renames[spirv[i + 1]].empty())
+                appendOpName(patched, spirv[i + 1], renames[spirv[i + 1]]);
+            else
+                patched.insert(patched.end(), spirv.begin() + i, spirv.begin() + i + count);
+            i += count;
+        }
+        spirv = std::move(patched);
+        return true;
+    }
+
     static TBuiltInResource InitResources()
     {
         TBuiltInResource Resources;
@@ -471,6 +611,18 @@ namespace ShaderCross
                     spv::SpvBuildLogger logger;
                     glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)stage), spirv, &logger);
 
+                    if (stage == EShLangVertex)
+                    {
+                        std::string inputError;
+                        if (!assignVertexInputNames(spirv, inputError))
+                        {
+                            compileFailed = true;
+                            result.success = false;
+                            result.errors += inputError + "\n";
+                            continue;
+                        }
+                    }
+
 #ifdef SHADERCROSS_BGFX_VULKAN
                     if (target.lang == SpirV)
                     {
@@ -527,7 +679,7 @@ namespace ShaderCross
                         {
                             translator->outputCode(target, sourcefilename, filename, compilerOutputBuffer.data(), attributes);
                             result.output[outputIndex] = compilerOutputBuffer.data();
-                            result.success = true;
+                            result.success = !compileFailed;
                             result.resultCount = 1;
                         }
                         catch (spirv_cross::CompilerError& error) {
