@@ -49,6 +49,7 @@ namespace ShaderCross
             {"u_cameraPosition", "vec3", "", ""},
             {"u_time", "vec4", "", ""},
             {"u_tintColor", "vec4", "", ""},
+            {"u_entityColor", "vec4", "", ""},
             {"s_texture", "sampler2D", "", "texture2D"},
             {"s_curveAtlasTexture", "sampler2D", "", "texture2D"},
         };
