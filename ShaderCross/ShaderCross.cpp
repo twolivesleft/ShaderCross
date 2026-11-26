@@ -74,15 +74,41 @@ namespace ShaderCross
             "a_texcoord12", "a_texcoord13", "a_texcoord14", "a_texcoord15",
         };
 
+        // The location defines naming each attribute, for messages
+        const char* const kAttribLocationNames[] =
+        {
+            "POSITION", "NORMAL", "TANGENT", "BITANGENT",
+            "COLOR0", "COLOR1", "COLOR2", "COLOR3",
+            "INDICES", "WEIGHT",
+            "TEXCOORD0", "TEXCOORD1", "TEXCOORD2", "TEXCOORD3",
+            "TEXCOORD4", "TEXCOORD5", "TEXCOORD6", "TEXCOORD7",
+            "TEXCOORD8", "TEXCOORD9", "TEXCOORD10", "TEXCOORD11",
+            "TEXCOORD12", "TEXCOORD13", "TEXCOORD14", "TEXCOORD15",
+        };
+
         const size_t kBgfxAttribCount = sizeof(kBgfxAttribNames) / sizeof(kBgfxAttribNames[0]);
+
+        // Names that select an attribute for an input without a location, besides bgfx's own
+        struct AttribAlias { const char* name; int attrib; };
+        const AttribAlias kAttribAliases[] =
+        {
+            { "position", 0 }, { "normal", 1 }, { "tangent", 2 }, { "bitangent", 3 },
+            { "color", 4 }, { "color0", 4 }, { "color1", 5 }, { "color2", 6 }, { "color3", 7 },
+            { "joints", 8 }, { "weights", 9 },
+            { "uv", 10 }, { "uv0", 10 }, { "uv1", 11 }, { "uv2", 12 }, { "uv3", 13 },
+            { "uv4", 14 }, { "uv5", 15 }, { "uv6", 16 }, { "uv7", 17 },
+        };
+
         const int kInstanceData = -1, kUnknownInput = -2;
 
-        // The bgfx attribute an input's name selects, kInstanceData, or kUnknownInput
-        int bgfxAttribForName(const std::string& name)
+        // The attribute an input's name selects, kInstanceData, or kUnknownInput
+        int attribForName(const std::string& name)
         {
             if (name.compare(0, 6, "i_data") == 0) return kInstanceData;
             for (size_t attrib = 0; attrib < kBgfxAttribCount; attrib++)
                 if (name == kBgfxAttribNames[attrib]) return (int)attrib;
+            for (const AttribAlias& alias : kAttribAliases)
+                if (name == alias.name) return alias.attrib;
             return kUnknownInput;
         }
 
@@ -96,33 +122,75 @@ namespace ShaderCross
             spirv[at + 1] = target;
             std::memcpy(&spirv[at + 2], name.data(), name.size());
         }
+
+        void appendLocation(std::vector<unsigned int>& spirv, uint32_t target, uint32_t location)
+        {
+            constexpr uint32_t OpDecorate = 71, DecorationLocation = 30;
+            const unsigned int words[] = { (4u << 16) | OpDecorate, target, DecorationLocation, location };
+            spirv.insert(spirv.end(), words, words + 4);
+        }
+
+        // Whether an instruction belongs to the sections ahead of the annotations: capabilities through debug names
+        bool precedesAnnotations(uint32_t op)
+        {
+            switch (op)
+            {
+                case 2: case 3: case 4: case 5: case 6: case 7: // OpSourceContinued...OpString
+                case 10: case 11: case 14: case 15: case 16: case 17: // OpExtension...OpCapability
+                case 330: case 331: // OpModuleProcessed, OpExecutionModeId
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 
-    /// Names each vertex input after the bgfx attribute its location selects, so
-    /// `layout(location = COLOR0) in vec4 a_color;` reads the mesh's colors. Inputs already
-    /// named for a bgfx attribute are left alone. Fails, with a message for the shader's
-    /// author, for an input bgfx could not bind; the renderer would reject it at draw time.
+    /// Names of the vertex inputs whose source declares a location. Must run before mapIO, which gives
+    /// the other inputs a location on Vulkan.
+    static std::vector<std::string> explicitlyLocatedInputs(glslang::TIntermediate& intermediate)
+    {
+        struct Collector : glslang::TIntermTraverser
+        {
+            std::vector<std::string> names;
+            void visitSymbol(glslang::TIntermSymbol* symbol) override
+            {
+                const glslang::TQualifier& qualifier = symbol->getQualifier();
+                if (qualifier.storage != glslang::EvqVaryingIn || !qualifier.hasLocation()) return;
+                const std::string name = symbol->getName().c_str();
+                if (std::find(names.begin(), names.end(), name) == names.end()) names.push_back(name);
+            }
+        } collector;
+        if (intermediate.getTreeRoot()) intermediate.getTreeRoot()->traverse(&collector);
+        return collector.names;
+    }
+
+    /// Points each vertex input at the mesh attribute it reads: the one its declared location selects, or
+    /// failing that its name (position, color, uv... or bgfx's a_position, a_color0, a_texcoord0...).
+    /// The input is renamed for bgfx, which binds by name, and given the attribute's location, which
+    /// Carbide's vertex layout validation reads. Fails, with a message for the shader's author, for an
+    /// input that selects no attribute or one another input reads.
     /// Uses id-indexed vectors rather than std::map: this file builds as C++14 while the engine
     /// builds as C++20, and libc++'s map lookups differ between the two under the same symbols.
-    static bool assignVertexInputNames(std::vector<unsigned int>& spirv, std::string& error)
+    static bool assignVertexInputs(std::vector<unsigned int>& spirv, const std::vector<std::string>& explicitlyLocated,
+                                   std::string& error)
     {
         constexpr uint32_t OpName = 5, OpVariable = 59, OpDecorate = 71;
         constexpr uint32_t DecorationBuiltIn = 11, DecorationLocation = 30, StorageClassInput = 1;
-        constexpr uint32_t kNoLocation = UINT32_MAX;
 
         if (spirv.size() < 5) return true;
         const uint32_t bound = spirv[3];
         std::vector<std::string> names(bound);
         std::vector<bool> named(bound, false), builtIn(bound, false);
-        std::vector<uint32_t> locations(bound, kNoLocation);
+        std::vector<size_t> locationAt(bound, 0); // the word holding each id's location, or 0
         std::vector<uint32_t> inputs;
-        size_t firstDecoration = spirv.size();
+        size_t annotationsAt = 0;
 
         auto valid = [&](uint32_t id) { return id < bound; };
         for (size_t i = 5; i < spirv.size(); )
         {
             const uint32_t count = spirv[i] >> 16, op = spirv[i] & 0xFFFF;
             if (count == 0 || i + count > spirv.size()) return true; // malformed; the translator reports it
+            if (annotationsAt == 0 && !precedesAnnotations(op)) annotationsAt = i;
             if (op == OpName && count >= 3 && valid(spirv[i + 1]))
             {
                 names[spirv[i + 1]] = reinterpret_cast<const char*>(&spirv[i + 2]);
@@ -130,8 +198,7 @@ namespace ShaderCross
             }
             else if (op == OpDecorate && count >= 3 && valid(spirv[i + 1]))
             {
-                firstDecoration = std::min(firstDecoration, i);
-                if (spirv[i + 2] == DecorationLocation && count >= 4) locations[spirv[i + 1]] = spirv[i + 3];
+                if (spirv[i + 2] == DecorationLocation && count >= 4) locationAt[spirv[i + 1]] = i + 3;
                 else if (spirv[i + 2] == DecorationBuiltIn) builtIn[spirv[i + 1]] = true;
             }
             else if (op == OpVariable && count >= 4 && spirv[i + 3] == StorageClassInput && valid(spirv[i + 2]))
@@ -140,54 +207,72 @@ namespace ShaderCross
             }
             i += count;
         }
+        if (annotationsAt == 0) annotationsAt = spirv.size();
 
-        std::vector<std::string> renames(bound);
+        std::vector<int> attribs(bound, kUnknownInput);
         std::vector<std::string> claimedBy(kBgfxAttribCount); // the input reading each attribute
-        bool renamed = false;
+        bool assigned = false;
         for (uint32_t id : inputs)
         {
             if (builtIn[id]) continue;
             const std::string& name = names[id];
-            int attrib = bgfxAttribForName(name);
+            int attrib = attribForName(name);
             if (attrib == kInstanceData) continue;
-            if (attrib == kUnknownInput)
+            const bool located = locationAt[id] != 0 &&
+                std::find(explicitlyLocated.begin(), explicitlyLocated.end(), name) != explicitlyLocated.end();
+            if (located)
             {
-                if (locations[id] >= kBgfxAttribCount)
+                const uint32_t location = spirv[locationAt[id]];
+                if (location >= kBgfxAttribCount)
                 {
-                    error = "Vertex input '" + name + "' does not match a mesh attribute. Declare it with "
-                            "layout(location = POSITION, NORMAL, TANGENT, COLOR0 or TEXCOORD0...), or name it "
-                            "a_position, a_normal, a_tangent, a_color0 or a_texcoord0...";
+                    error = "Vertex input '" + name + "' has location " + std::to_string(location) +
+                            ", which is not a mesh attribute. Use POSITION, NORMAL, TANGENT, BITANGENT, "
+                            "COLOR0 to COLOR3, INDICES, WEIGHT or TEXCOORD0 to TEXCOORD7.";
                     return false;
                 }
-                attrib = (int)locations[id];
-                renames[id] = kBgfxAttribNames[attrib];
-                renamed = true;
+                attrib = (int)location;
+            }
+            else if (attrib == kUnknownInput)
+            {
+                error = "Vertex input '" + name + "' does not say which mesh attribute it reads. Name it position, "
+                        "normal, tangent, bitangent, color, joints, weights or uv, or give it a location, "
+                        "such as layout(location = TEXCOORD1).";
+                return false;
             }
             if (!claimedBy[attrib].empty())
             {
-                error = "Vertex inputs '" + claimedBy[attrib] + "' and '" + name + "' both read the mesh attribute " +
-                        kBgfxAttribNames[attrib] + ". Give each input its own location.";
+                error = "Vertex inputs '" + claimedBy[attrib] + "' and '" + name + "' both read the mesh's " +
+                        kAttribLocationNames[attrib] + " attribute. Give each input its own location.";
                 return false;
             }
             claimedBy[attrib] = name;
+            attribs[id] = attrib;
+            assigned = true;
         }
-        if (!renamed) return true;
+        if (!assigned) return true;
 
+        auto assignedId = [&](uint32_t id) { return valid(id) && attribs[id] >= 0; };
         std::vector<unsigned int> patched(spirv.begin(), spirv.begin() + 5);
-        patched.reserve(spirv.size() + inputs.size() * 6);
-        for (size_t i = 5; i < spirv.size(); )
+        patched.reserve(spirv.size() + inputs.size() * 10);
+        for (size_t i = 5; i <= spirv.size(); )
         {
-            const uint32_t count = spirv[i] >> 16;
-            if (i == firstDecoration)
+            if (i == annotationsAt)
             {
-                // Inputs glslang left unnamed get a name ahead of the annotations
+                // Debug names, then annotations, for inputs that had neither
                 for (uint32_t id : inputs)
-                    if (!renames[id].empty() && !named[id]) appendOpName(patched, id, renames[id]);
+                    if (assignedId(id) && !named[id]) appendOpName(patched, id, kBgfxAttribNames[attribs[id]]);
+                for (uint32_t id : inputs)
+                    if (assignedId(id) && locationAt[id] == 0) appendLocation(patched, id, (uint32_t)attribs[id]);
             }
-            if ((spirv[i] & 0xFFFF) == OpName && valid(spirv[i + 1]) && !renames[spirv[i + 1]].empty())
-                appendOpName(patched, spirv[i + 1], renames[spirv[i + 1]]);
+            if (i == spirv.size()) break;
+
+            const uint32_t count = spirv[i] >> 16, op = spirv[i] & 0xFFFF;
+            if (op == OpName && assignedId(spirv[i + 1]))
+                appendOpName(patched, spirv[i + 1], kBgfxAttribNames[attribs[spirv[i + 1]]]);
             else
                 patched.insert(patched.end(), spirv.begin() + i, spirv.begin() + i + count);
+            if (op == OpDecorate && count >= 4 && spirv[i + 2] == DecorationLocation && assignedId(spirv[i + 1]))
+                patched.back() = (uint32_t)attribs[spirv[i + 1]];
             i += count;
         }
         spirv = std::move(patched);
@@ -588,6 +673,10 @@ namespace ShaderCross
                 if (auto intermediate = program.getIntermediate(static_cast<EShLanguage>(stage)))
                     metalBindings->reserveExplicitBindings(*intermediate);
         }
+        // mapIO gives every input a location on Vulkan, so note which ones the source declares
+        std::vector<std::string> locatedInputs;
+        if (glslang::TIntermediate* vertex = program.getIntermediate(EShLangVertex))
+            locatedInputs = explicitlyLocatedInputs(*vertex);
         if (!program.mapIO(metalBindings.get()))
         {
             linkFailed = true;
@@ -614,7 +703,7 @@ namespace ShaderCross
                     if (stage == EShLangVertex)
                     {
                         std::string inputError;
-                        if (!assignVertexInputNames(spirv, inputError))
+                        if (!assignVertexInputs(spirv, locatedInputs, inputError))
                         {
                             compileFailed = true;
                             result.success = false;
